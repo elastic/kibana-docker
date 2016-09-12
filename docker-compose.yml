@@ -1,0 +1,33 @@
+---
+version: '2'
+services:
+  kibana:
+    build:
+      context: build/kibana
+      args:
+        KIBANA_VERSION: "${KIBANA_VERSION}"
+    image: kibana
+    command: /opt/kibana/bin/kibana -e http://elastic:changeme@elasticsearch:9200
+    links:
+      - elasticsearch
+    ports:
+      - 5601:5601
+
+  elasticsearch:
+    image: container-registry.elastic.co/elasticsearch/elasticsearch:${KIBANA_VERSION}
+    mem_limit: 4g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+
+  tester:
+    build:
+      context: build/python
+    links:
+      - kibana
+    volumes:
+      - ./tests:/tmp/tests
