@@ -9,5 +9,6 @@ RUN curl -Ls https://download.elastic.co/kibana/kibana/kibana-${KIBANA_VERSION}-
 RUN /opt/kibana/bin/kibana-plugin install x-pack
 
 WORKDIR /opt/kibana
-CMD /opt/kibana/bin/kibana
+ENV ELASTICSEARCH_URL http://elasticsearch:9200
+CMD /opt/kibana/bin/kibana --elasticsearch.url=${ELASTICSEARCH_URL}
 EXPOSE 5601
