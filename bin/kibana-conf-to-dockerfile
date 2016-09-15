@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-# Given a standard "kibana.yml" config file for kibana, find all the
-# configuration options and produce match Dockerfile "ENV" statements.
-#
-# The output, when added to a Dockerfile creates one-to-one mapping of
-# environment variables to Kibana config options.
-#
-# This allows you to say something like:
+# Given a standard "kibana.yml" config file for Kibana, find all the
+# configuration options and produce matching Dockerfile "ENV"
+# statements.
+
+# The output, when added to a Dockerfile creates a one-to-one mapping
+# of environment variables to Kibana config options.  This allows you
+# to say something like:
 #
 #   docker run -e 'ELASTICSEARCH_URL=http://es_host:9200' kibana
 #
@@ -35,16 +35,20 @@ config = yaml.load(config_lines)
 
 
 # These options can not, by their nature, have working defaults in the config.
-banned_config_options = [
+masked_config_options = [
+    'elasticsearch.customHeaders',
     'elasticsearch.password',
+    'elasticsearch.ssl.ca',
     'elasticsearch.ssl.cert',
     'elasticsearch.ssl.key',
     'elasticsearch.username',
+    'pid.file',
+    'server.host',
     'server.ssl.cert',
     'server.ssl.key',
 ]
 for option in config.keys():
-    if option in banned_config_options:
+    if option in masked_config_options:
         del(config[option])
 
 
@@ -56,15 +60,18 @@ config['server.name'] = 'kibana'
 for setting in sorted(config.keys()):
     value = config[setting]
     if value == '':   # an empty string...
-        value = '""'  # make it explicit in the Dockerfile.
+        value = '\'""\''  # make it explicit in the Dockerfile.
     environment_variable = make_env_var(setting)
+
+    if setting == 'elasticsearch.url':
+        value = 'http://elastic:changeme@elasticsearch:9200'
     print 'ENV %s %s' % (environment_variable, value)
 
-# Produce a docker 'CMD' statement that passes all the option on the command
-# to Kibana via command line long options.
+# Produce a docker 'CMD' statement that passes all the options to Kibana via
+# command line long options.
 sys.stdout.write('CMD /opt/kibana/bin/kibana')
 for setting in sorted(config.keys()):
-    longopt = ' \\\n        --%s=${%s}' % (setting, make_env_var(setting))
+    longopt = ' \\\n        --%s="${%s}"' % (setting, make_env_var(setting))
     sys.stdout.write(longopt)
 
 # Produce a Markdown table for documentation (README.md)

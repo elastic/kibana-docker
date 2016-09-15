@@ -29,13 +29,11 @@ example above.
 <!--- Generate this table with ./bin/kibana-conf-to-dockerfile kibana.yml -->
 |Environment Variable|Kibana Setting|
 |:-------------------|:-------------|
-|`ELASTICSEARCH_CUSTOMHEADERS` | `elasticsearch.customHeaders`|
 |`ELASTICSEARCH_PINGTIMEOUT` | `elasticsearch.pingTimeout`|
 |`ELASTICSEARCH_PRESERVEHOST` | `elasticsearch.preserveHost`|
 |`ELASTICSEARCH_REQUESTHEADERSWHITELIST` | `elasticsearch.requestHeadersWhitelist`|
 |`ELASTICSEARCH_REQUESTTIMEOUT` | `elasticsearch.requestTimeout`|
 |`ELASTICSEARCH_SHARDTIMEOUT` | `elasticsearch.shardTimeout`|
-|`ELASTICSEARCH_SSL_CA` | `elasticsearch.ssl.ca`|
 |`ELASTICSEARCH_SSL_VERIFY` | `elasticsearch.ssl.verify`|
 |`ELASTICSEARCH_STARTUPTIMEOUT` | `elasticsearch.startupTimeout`|
 |`ELASTICSEARCH_URL` | `elasticsearch.url`|
@@ -46,9 +44,7 @@ example above.
 |`LOGGING_SILENT` | `logging.silent`|
 |`LOGGING_VERBOSE` | `logging.verbose`|
 |`OPS_INTERVAL` | `ops.interval`|
-|`PID_FILE` | `pid.file`|
 |`SERVER_BASEPATH` | `server.basePath`|
-|`SERVER_HOST` | `server.host`|
 |`SERVER_MAXPAYLOADBYTES` | `server.maxPayloadBytes`|
 |`SERVER_NAME` | `server.name`|
 |`SERVER_PORT` | `server.port`|
