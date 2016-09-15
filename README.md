@@ -23,7 +23,7 @@ docker run -d -p 5601:5601 -e 'ELASTICSEARCH_URL=http://es_host:9200' container-
 ##### Configuration options
 
 Most Kibana settings, which are traditionally set in `kibana.yml` can be passed
-as environment variables to the container with `-e`, as seen the `ELASTICSEARCH_URL`
+as environment variables to the container with `-e`, as seen in the `ELASTICSEARCH_URL`
 example above.
 
 <!--- Generate this table with ./bin/kibana-conf-to-dockerfile kibana.yml -->
