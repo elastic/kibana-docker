@@ -20,4 +20,35 @@ Available tags:
 docker run -d -p 5601:5601 -e 'ELASTICSEARCH_URL=http://es_host:9200' container-registry.elastic.co/kibana/kibana
 ```
 
-... where `es_host` resolves to a hostname running Elasticsearch.
+##### Configuration options
+
+Most Kibana settings, which are traditionally set in `kibana.yml` can be passed
+as environment variables to the container with `-e`, as seen the `ELASTICSEARCH_URL`
+example above.
+
+<!--- Generate this table with ./bin/kibana-conf-to-dockerfile kibana.yml -->
+|Environment Variable|Kibana Setting|
+|:-------------------|:-------------|
+|`ELASTICSEARCH_CUSTOMHEADERS` | `elasticsearch.customHeaders`|
+|`ELASTICSEARCH_PINGTIMEOUT` | `elasticsearch.pingTimeout`|
+|`ELASTICSEARCH_PRESERVEHOST` | `elasticsearch.preserveHost`|
+|`ELASTICSEARCH_REQUESTHEADERSWHITELIST` | `elasticsearch.requestHeadersWhitelist`|
+|`ELASTICSEARCH_REQUESTTIMEOUT` | `elasticsearch.requestTimeout`|
+|`ELASTICSEARCH_SHARDTIMEOUT` | `elasticsearch.shardTimeout`|
+|`ELASTICSEARCH_SSL_CA` | `elasticsearch.ssl.ca`|
+|`ELASTICSEARCH_SSL_VERIFY` | `elasticsearch.ssl.verify`|
+|`ELASTICSEARCH_STARTUPTIMEOUT` | `elasticsearch.startupTimeout`|
+|`ELASTICSEARCH_URL` | `elasticsearch.url`|
+|`KIBANA_DEFAULTAPPID` | `kibana.defaultAppId`|
+|`KIBANA_INDEX` | `kibana.index`|
+|`LOGGING_DEST` | `logging.dest`|
+|`LOGGING_QUIET` | `logging.quiet`|
+|`LOGGING_SILENT` | `logging.silent`|
+|`LOGGING_VERBOSE` | `logging.verbose`|
+|`OPS_INTERVAL` | `ops.interval`|
+|`PID_FILE` | `pid.file`|
+|`SERVER_BASEPATH` | `server.basePath`|
+|`SERVER_HOST` | `server.host`|
+|`SERVER_MAXPAYLOADBYTES` | `server.maxPayloadBytes`|
+|`SERVER_NAME` | `server.name`|
+|`SERVER_PORT` | `server.port`|
