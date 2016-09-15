@@ -76,8 +76,13 @@ for setting in sorted(config.keys()):
 
 # Produce a Markdown table for documentation (README.md)
 sys.stdout.write('\n\n-%<-----Markdown Docs---%<-------\n')
-sys.stdout.write('|Environment Variable|Kibana Setting|\n')
-sys.stdout.write('|:-------------------|:-------------|\n')
+sys.stdout.write('|Environment Variable|Kibana Setting|Default Value|\n')
+sys.stdout.write('|:-------------------|:-------------|:------------|\n')
 for setting in sorted(config.keys()):
-    longopt = '|`%s` | `%s`|\n' % (make_env_var(setting), setting)
-    sys.stdout.write(longopt)
+    value = config[setting]
+    if value is None or value == '':
+        value = "_Null_"
+    else:
+        value = '`%s`' % value
+    option_doc = '| `%s` | `%s` | %s |\n' % (make_env_var(setting), setting, value)
+    sys.stdout.write(option_doc)
