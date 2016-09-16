@@ -34,14 +34,12 @@ with open(sys.argv[1]) as config_file:
 config = yaml.load(config_lines)
 
 
-# These options can not, by their nature, have working defaults in the config.
+# Don't map these options through to the Dockerfile.
 masked_config_options = [
     'elasticsearch.customHeaders',
-    'elasticsearch.password',
     'elasticsearch.ssl.ca',
     'elasticsearch.ssl.cert',
     'elasticsearch.ssl.key',
-    'elasticsearch.username',
     'pid.file',
     'server.host',
     'server.ssl.cert',
@@ -51,6 +49,13 @@ for option in config.keys():
     if option in masked_config_options:
         del(config[option])
 
+overrides = {
+    'elasticsearch.url': 'http://elasticsearch:9200',
+    'elasticsearch.username': 'elastic',
+    'elasticsearch.password': 'changeme',
+    'elasticsearch.requestHeadersWhitelist': 'Authorization',
+    'server.basePath': '\'""\''
+}
 
 # The example config has 'your-hostname' for server.name.
 # Let's have something slightly nicer.
@@ -58,13 +63,9 @@ config['server.name'] = 'kibana'
 
 # Produce a Docker 'ENV' statement for every option.
 for setting in sorted(config.keys()):
-    value = config[setting]
-    if value == '':   # an empty string...
-        value = '\'""\''  # make it explicit in the Dockerfile.
+    value = overrides.get(setting, config[setting])
     environment_variable = make_env_var(setting)
 
-    if setting == 'elasticsearch.url':
-        value = 'http://elastic:changeme@elasticsearch:9200'
     print 'ENV %s %s' % (environment_variable, value)
 
 # Produce a docker 'CMD' statement that passes all the options to Kibana via
@@ -79,7 +80,7 @@ sys.stdout.write('\n\n-%<-----Markdown Docs---%<-------\n')
 sys.stdout.write('|Environment Variable|Kibana Setting|Default Value|\n')
 sys.stdout.write('|:-------------------|:-------------|:------------|\n')
 for setting in sorted(config.keys()):
-    value = config[setting]
+    value = overrides.get(setting, config[setting])
     if value is None or value == '':
         value = "_Null_"
     else:

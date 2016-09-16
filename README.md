@@ -29,14 +29,16 @@ example above.
 <!--- Generate this table with ./bin/kibana-conf-to-dockerfile kibana.yml -->
 |Environment Variable|Kibana Setting|Default Value|
 |:-------------------|:-------------|:------------|
+| `ELASTICSEARCH_PASSWORD` | `elasticsearch.password` | `changeme` |
 | `ELASTICSEARCH_PINGTIMEOUT` | `elasticsearch.pingTimeout` | `1500` |
 | `ELASTICSEARCH_PRESERVEHOST` | `elasticsearch.preserveHost` | `True` |
-| `ELASTICSEARCH_REQUESTHEADERSWHITELIST` | `elasticsearch.requestHeadersWhitelist` | `['authorization']` |
+| `ELASTICSEARCH_REQUESTHEADERSWHITELIST` | `elasticsearch.requestHeadersWhitelist` | `Authorization` |
 | `ELASTICSEARCH_REQUESTTIMEOUT` | `elasticsearch.requestTimeout` | `30000` |
 | `ELASTICSEARCH_SHARDTIMEOUT` | `elasticsearch.shardTimeout` | `0` |
 | `ELASTICSEARCH_SSL_VERIFY` | `elasticsearch.ssl.verify` | `True` |
 | `ELASTICSEARCH_STARTUPTIMEOUT` | `elasticsearch.startupTimeout` | `5000` |
-| `ELASTICSEARCH_URL` | `elasticsearch.url` | `http://localhost:9200` |
+| `ELASTICSEARCH_URL` | `elasticsearch.url` | `http://elasticsearch:9200` |
+| `ELASTICSEARCH_USERNAME` | `elasticsearch.username` | `elastic` |
 | `KIBANA_DEFAULTAPPID` | `kibana.defaultAppId` | `discover` |
 | `KIBANA_INDEX` | `kibana.index` | `.kibana` |
 | `LOGGING_DEST` | `logging.dest` | `stdout` |
@@ -44,7 +46,7 @@ example above.
 | `LOGGING_SILENT` | `logging.silent` | `False` |
 | `LOGGING_VERBOSE` | `logging.verbose` | `False` |
 | `OPS_INTERVAL` | `ops.interval` | `5000` |
-| `SERVER_BASEPATH` | `server.basePath` | _Null_ |
+| `SERVER_BASEPATH` | `server.basePath` | `'""'` |
 | `SERVER_MAXPAYLOADBYTES` | `server.maxPayloadBytes` | `1048576` |
 | `SERVER_NAME` | `server.name` | `kibana` |
 | `SERVER_PORT` | `server.port` | `5601` |

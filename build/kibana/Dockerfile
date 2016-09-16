@@ -17,15 +17,16 @@ WORKDIR /opt/kibana
 #
 # Everything below this comment should be generated, not edited by hand.
 # Use `./bin/kibana-conf-to-dockerfile kibana.yml`.
-ENV ELASTICSEARCH_CUSTOMHEADERS {}
+ENV ELASTICSEARCH_PASSWORD changeme
 ENV ELASTICSEARCH_PINGTIMEOUT 1500
 ENV ELASTICSEARCH_PRESERVEHOST True
-ENV ELASTICSEARCH_REQUESTHEADERSWHITELIST ['authorization']
+ENV ELASTICSEARCH_REQUESTHEADERSWHITELIST Authorization
 ENV ELASTICSEARCH_REQUESTTIMEOUT 30000
 ENV ELASTICSEARCH_SHARDTIMEOUT 0
 ENV ELASTICSEARCH_SSL_VERIFY True
 ENV ELASTICSEARCH_STARTUPTIMEOUT 5000
-ENV ELASTICSEARCH_URL http://kibana:changeme@elasticsearch:9200
+ENV ELASTICSEARCH_URL http://elasticsearch:9200
+ENV ELASTICSEARCH_USERNAME elastic
 ENV KIBANA_DEFAULTAPPID discover
 ENV KIBANA_INDEX .kibana
 ENV LOGGING_DEST stdout
@@ -34,11 +35,11 @@ ENV LOGGING_SILENT False
 ENV LOGGING_VERBOSE False
 ENV OPS_INTERVAL 5000
 ENV SERVER_BASEPATH '""'
-ENV SERVER_HOST localhost
 ENV SERVER_MAXPAYLOADBYTES 1048576
 ENV SERVER_NAME kibana
 ENV SERVER_PORT 5601
 CMD /opt/kibana/bin/kibana \
+        --elasticsearch.password="${ELASTICSEARCH_PASSWORD}" \
         --elasticsearch.pingTimeout="${ELASTICSEARCH_PINGTIMEOUT}" \
         --elasticsearch.preserveHost="${ELASTICSEARCH_PRESERVEHOST}" \
         --elasticsearch.requestHeadersWhitelist="${ELASTICSEARCH_REQUESTHEADERSWHITELIST}" \
@@ -47,6 +48,7 @@ CMD /opt/kibana/bin/kibana \
         --elasticsearch.ssl.verify="${ELASTICSEARCH_SSL_VERIFY}" \
         --elasticsearch.startupTimeout="${ELASTICSEARCH_STARTUPTIMEOUT}" \
         --elasticsearch.url="${ELASTICSEARCH_URL}" \
+        --elasticsearch.username="${ELASTICSEARCH_USERNAME}" \
         --kibana.defaultAppId="${KIBANA_DEFAULTAPPID}" \
         --kibana.index="${KIBANA_INDEX}" \
         --logging.dest="${LOGGING_DEST}" \
