@@ -17,7 +17,7 @@ Available tags:
 ##### Run Kibana listening on localhost port 5601:
 
 ``` shell
-docker run -d -p 5601:5601 -e 'ELASTICSEARCH_URL=http://es_host:9200' container-registry.elastic.co/kibana/kibana
+docker run -d -p 5601:5601 -e 'ELASTICSEARCH_URL=http://es_host:9200' --name kibana container-registry.elastic.co/kibana/kibana
 ```
 
 ##### Configuration options
