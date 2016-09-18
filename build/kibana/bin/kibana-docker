@@ -57,5 +57,4 @@ for kibana_var in ${kibana_vars[*]}; do
     fi
 done
 
-echo /opt/kibana/bin/kibana ${longopts}
 exec /opt/kibana/bin/kibana ${longopts}
