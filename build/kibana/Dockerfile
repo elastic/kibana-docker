@@ -18,5 +18,6 @@ ENV ELASTICSEARCH_PASSWORD changeme
 
 # Add the launcher/wrapper script. It knows how to interpret these environment
 # variables and get them passed to Kibana.
-ADD kibana-docker /usr/local/bin
+ADD ssl/kibana.example.org.* /opt/kibana/config/
+ADD bin/kibana-docker /usr/local/bin/
 CMD /usr/local/bin/kibana-docker
