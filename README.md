@@ -1,7 +1,7 @@
 ## Description
 
 This is the official Kibana image created by Elastic Inc.
-Kibana is built with [x-pack](https://www.elastic.co/guide/en/x-pack/current/index.html).
+Kibana is built with [X-Pack](https://www.elastic.co/guide/en/x-pack/current/index.html).
 
 ## Image tags and hosting
 
