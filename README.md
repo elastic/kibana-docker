@@ -62,7 +62,7 @@ example above.
 To enable SSL encryption, provide certificate and key files in PEM
 format, and tell Kibana where to find them.
 
-The files could be provided from a mounted volume, or added to you own image
+The files could be provided from a mounted volume, or added to your own image
 with a Dockerfile like this one:
 
 ``` dockerfile
