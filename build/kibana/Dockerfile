@@ -24,4 +24,5 @@ ADD bin/kibana-docker /usr/local/bin/
 # Add a self-signed SSL certificate for use in examples.
 ADD ssl/kibana.example.org.* /opt/kibana/config/
 
+USER kibana
 CMD /usr/local/bin/kibana-docker
