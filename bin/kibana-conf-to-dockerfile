@@ -36,14 +36,14 @@ config = yaml.load(config_lines)
 
 # Don't map these options through to the Dockerfile.
 masked_config_options = [
-    'elasticsearch.customHeaders',
-    'elasticsearch.ssl.ca',
-    'elasticsearch.ssl.cert',
-    'elasticsearch.ssl.key',
-    'pid.file',
-    'server.host',
-    'server.ssl.cert',
-    'server.ssl.key',
+    # 'elasticsearch.customHeaders',
+    # 'elasticsearch.ssl.ca',
+    # 'elasticsearch.ssl.cert',
+    # 'elasticsearch.ssl.key',
+    # 'pid.file',
+    # 'server.host',
+    # 'server.ssl.cert',
+    # 'server.ssl.key',
 ]
 for option in config.keys():
     if option in masked_config_options:
@@ -54,7 +54,9 @@ overrides = {
     'elasticsearch.username': 'elastic',
     'elasticsearch.password': 'changeme',
     'elasticsearch.requestHeadersWhitelist': 'Authorization',
-    'server.basePath': '\'""\''
+    'server.basePath': '""',
+    'server.ssl.cert': '',
+    'server.ssl.key': '',
 }
 
 # The example config has 'your-hostname' for server.name.
