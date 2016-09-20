@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 ifndef KIBANA_VERSION
-KIBANA_VERSION=5.0.0-alpha5
+KIBANA_VERSION=5.0.0-beta1
 endif
 
 export KIBANA_VERSION
