@@ -13,6 +13,7 @@ WORKDIR /opt/kibana
 
 # Set some Kibana configuration defaults.
 ENV SERVER_NAME kibana
+ENV SERVER_HOST \"0\"
 ENV ELASTICSEARCH_URL http://elasticsearch:9200
 ENV ELASTICSEARCH_USERNAME elastic
 ENV ELASTICSEARCH_PASSWORD changeme
