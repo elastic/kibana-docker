@@ -6,9 +6,9 @@ EXPOSE 5601
 RUN mkdir /opt/kibana
 WORKDIR /opt/kibana
 
-RUN curl -Ls http://staging.elastic.co/${KIBANA_VERSION}-5eb5cbdb/downloads/kibana/kibana-${KIBANA_VERSION}-linux-x86_64.tar.gz | tar --strip-components=1 -zxf -
-#RUN /opt/kibana/bin/kibana-plugin install x-pack
-RUN bin/kibana-plugin install https://staging.elastic.co/${KIBANA_VERSION}-5eb5cbdb/downloads/kibana-plugins/x-pack/x-pack-${KIBANA_VERSION}.zip
+RUN curl -Ls https://artifacts.elastic.co/downloads/kibana/kibana-${KIBANA_VERSION}-linux-x86_64.tar.gz | tar --strip-components=1 -zxf -
+RUN /opt/kibana/bin/kibana-plugin install x-pack
+#RUN bin/kibana-plugin install https://staging.elastic.co/${KIBANA_VERSION}-5eb5cbdb/downloads/kibana-plugins/x-pack/x-pack-${KIBANA_VERSION}.zip
 WORKDIR /opt/kibana
 
 # Set some Kibana configuration defaults.
