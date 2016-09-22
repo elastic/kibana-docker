@@ -5,7 +5,7 @@ endif
 
 export KIBANA_VERSION
 
-REGISTRY=container-registry.elastic.co
+REGISTRY=docker.elastic.co
 REMOTE_IMAGE=$(REGISTRY)/kibana/kibana
 VERSION_TAG=$(REMOTE_IMAGE):$(KIBANA_VERSION)
 LATEST_TAG=$(REMOTE_IMAGE):latest

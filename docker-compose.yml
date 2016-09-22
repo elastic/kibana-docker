@@ -21,7 +21,7 @@ services:
     #   - SERVER_SSL_KEY=/opt/kibana/config/kibana.example.org.key
 
   elasticsearch:
-    image: container-registry.elastic.co/elasticsearch/elasticsearch:${KIBANA_VERSION}
+    image: docker.elastic.co/elasticsearch/elasticsearch:${KIBANA_VERSION}
 
   tester:
     build:

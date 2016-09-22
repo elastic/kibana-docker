@@ -5,7 +5,7 @@ Kibana is built with [X-Pack](https://www.elastic.co/guide/en/x-pack/current/ind
 
 ## Image tags and hosting
 
-The image is hosted in Elastic's own docker registry: `container-registry.elastic.co/kibana`
+The image is hosted in Elastic's own docker registry: `docker.elastic.co/kibana`
 
 Available tags:
 
@@ -17,7 +17,7 @@ Available tags:
 ##### Run Kibana listening on localhost port 5601:
 
 ``` shell
-docker run -d -p 5601:5601 -e 'ELASTICSEARCH_URL=http://es_host:9200' --name kibana container-registry.elastic.co/kibana/kibana
+docker run -d -p 5601:5601 -e 'ELASTICSEARCH_URL=http://es_host:9200' --name kibana docker.elastic.co/kibana/kibana
 ```
 
 ## Configuration options
@@ -66,7 +66,7 @@ The files could be provided from a mounted volume, or added to your own image
 with a Dockerfile like this one:
 
 ``` dockerfile
-FROM container-registry.elastic.co/kibana/kibana
+FROM docker.elastic.co/kibana/kibana
 ADD mysite.crt mysite.key ./
 USER root
 RUN chown kibana mysite.key && chmod 0400 mysite.key

@@ -1,4 +1,4 @@
-FROM container-registry.elastic.co/kibana/kibana-ubuntu-base:latest
+FROM docker.elastic.co/kibana/kibana-ubuntu-base:latest
 MAINTAINER Elastic Docker Team <docker@elastic.co>
 ARG KIBANA_VERSION
 EXPOSE 5601
