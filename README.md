@@ -10,7 +10,9 @@ The image is hosted in Elastic's own docker registry: `docker.elastic.co/kibana`
 Available tags:
 
 - 5.0.0-alpha5
-- latest -> 5.0.0-alpha5
+- 5.0.0-beta1
+- rc1
+- latest -> rc1
 
 ## Using the image
 
