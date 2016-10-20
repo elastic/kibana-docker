@@ -18,8 +18,8 @@ services:
     # only be used for experimentation, never in production.
     #
     # environment:
-    #   - SERVER_SSL_CERT=/kibana/config/kibana.example.org.crt
-    #   - SERVER_SSL_KEY=/kibana/config/kibana.example.org.key
+    #   - SERVER_SSL_CERT=/usr/share/kibana/config/kibana.example.org.crt
+    #   - SERVER_SSL_KEY=/usr/share/kibana/config/kibana.example.org.key
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION_TAG}

@@ -72,7 +72,7 @@ for setting in sorted(config.keys()):
 
 # Produce a docker 'CMD' statement that passes all the options to Kibana via
 # command line long options.
-sys.stdout.write('CMD /kibana/bin/kibana')
+sys.stdout.write('CMD /usr/share/kibana/bin/kibana')
 for setting in sorted(config.keys()):
     longopt = ' \\\n        --%s="${%s}"' % (setting, make_env_var(setting))
     sys.stdout.write(longopt)

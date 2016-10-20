@@ -8,9 +8,6 @@ WORKDIR /usr/share/kibana
 RUN curl -Ls ${KIBANA_DOWNLOAD_URL} | tar --strip-components=1 -zxf -
 RUN bin/kibana-plugin install ${X_PACK_URL}
 
-# Add a symlink from /opt/kibana for backward compatibility.
-RUN ln -s /usr/share/kibana /opt/kibana
-
 # Set some Kibana configuration defaults.
 ENV SERVER_NAME kibana
 ENV SERVER_HOST \"0\"
