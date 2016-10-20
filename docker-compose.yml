@@ -5,7 +5,8 @@ services:
     build:
       context: build/kibana
       args:
-        KIBANA_VERSION: "${KIBANA_VERSION}"
+        KIBANA_DOWNLOAD_URL: "${KIBANA_DOWNLOAD_URL}"
+        X_PACK_URL: "${X_PACK_URL}"
     image: kibana
     links:
       - elasticsearch
@@ -15,13 +16,13 @@ services:
     # Configure certificate and key files to enable SSL. The certificate
     # provided in the example is self-signed, and thus insecure. It should
     # only be used for experimentation, never in production.
-    # 
+    #
     # environment:
-    #   - SERVER_SSL_CERT=/opt/kibana/config/kibana.example.org.crt
-    #   - SERVER_SSL_KEY=/opt/kibana/config/kibana.example.org.key
+    #   - SERVER_SSL_CERT=/kibana/config/kibana.example.org.crt
+    #   - SERVER_SSL_KEY=/kibana/config/kibana.example.org.key
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${KIBANA_VERSION}
+    image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION_TAG}
 
   tester:
     build:
