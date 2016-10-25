@@ -7,7 +7,7 @@ services:
       args:
         KIBANA_DOWNLOAD_URL: "${KIBANA_DOWNLOAD_URL}"
         X_PACK_URL: "${X_PACK_URL}"
-    image: kibana
+    image: "${VERSIONED_IMAGE}"
     links:
       - elasticsearch
     ports:

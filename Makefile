@@ -13,15 +13,17 @@ KIBANA_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/kibana/kibana-${ELAST
 X_PACK_URL=x-pack
 endif
 
+REGISTRY=docker.elastic.co
+IMAGE=$(REGISTRY)/kibana/kibana
+VERSIONED_IMAGE=$(IMAGE):$(VERSION_TAG)
+LATEST_IMAGE=$(IMAGE):latest
+
 export ELASTIC_VERSION
 export KIBANA_DOWNLOAD_URL
 export X_PACK_URL
+export VERSIONED_IMAGE
 export VERSION_TAG
 
-REGISTRY=docker.elastic.co
-REMOTE_IMAGE=$(REGISTRY)/kibana/kibana
-IMAGE_TAG=$(REMOTE_IMAGE):$(VERSION_TAG)
-LATEST_TAG=$(REMOTE_IMAGE):latest
 BASE_IMAGE=$(REGISTRY)/kibana/kibana-ubuntu-base:latest
 
 TEST_COMPOSE=docker-compose --file docker-compose.test.yml
@@ -39,16 +41,14 @@ pytest:
 
 build:
 	docker-compose build --pull
-	docker tag kibana kibana:$(VERSION_TAG)
 
 push: build
-	docker tag kibana:$(VERSION_TAG) $(IMAGE_TAG)
-	docker push $(IMAGE_TAG)
+	docker push $(VERSIONED_IMAGE)
 
 	# Only push latest if not a staging build
 	if [ -z $$STAGING_BUILD_NUM ]; then \
-		docker tag $(IMAGE_TAG) $(LATEST_TAG); \
-		docker push $(LATEST_TAG); \
+		docker tag $(VERSIONED_IMAGE) $(LATEST_IMAGE); \
+		docker push $(LATEST_IMAGE); \
 	fi
 
 clean: clean-test

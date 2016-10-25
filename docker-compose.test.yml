@@ -2,7 +2,7 @@
 version: '2'
 services:
   kibana:
-    image: kibana:${VERSION_TAG}
+    image: ${VERSIONED_IMAGE}
     links:
       - elasticsearch
 
