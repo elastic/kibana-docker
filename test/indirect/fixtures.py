@@ -4,8 +4,8 @@ import requests
 import urlparse
 from retrying import retry
 from pytest import fixture
-from tests.exceptions import DockerStackError
-from tests.retry import retry_settings
+from .exceptions import DockerStackError
+from .retry import retry_settings
 
 
 class Kibana(object):

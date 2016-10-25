@@ -15,4 +15,4 @@ services:
     links:
       - kibana
     volumes:
-      - ./tests:/tmp/tests:ro
+      - ./test:/test:ro

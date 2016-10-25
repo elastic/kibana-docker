@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from tests.exceptions import DockerStackError
+from .exceptions import DockerStackError
 from requests.exceptions import ConnectionError
 
 

@@ -28,16 +28,26 @@ BASE_IMAGE=$(REGISTRY)/kibana/kibana-ubuntu-base:latest
 
 TEST_COMPOSE=docker-compose --file docker-compose.test.yml
 
-test: flake8 clean build
+test: flake8 clean build test-direct test-indirect
+
+test-direct:
+# Direct tests: Invoke the image in various ways and make assertions.
+	test -d venv || virtualenv --python=python3.5 venv
+	( \
+	  source venv/bin/activate; \
+	  pip install -r test/direct/requirements.txt; \
+	  py.test test/direct \
+	)
+
+test-indirect:
+# Indirect tests: Use a dedicated testing container to probe Kibana
+# over the network.
 	$(TEST_COMPOSE) up -d elasticsearch kibana
-	make pytest || (make clean; false)
+	$(TEST_COMPOSE) run --rm tester py.test -p no:cacheprovider /test/indirect || (make clean; false)
 	make clean
 
 flake8:
-	$(TEST_COMPOSE) run --rm tester flake8 /tmp/tests
-
-pytest:
-	$(TEST_COMPOSE) run --rm tester py.test -p no:cacheprovider /tmp/tests
+	$(TEST_COMPOSE) run --rm tester flake8 /test
 
 build:
 	docker-compose build --pull
