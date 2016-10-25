@@ -2,7 +2,7 @@
 version: '2'
 services:
   kibana:
-    image: docker.elastic.co/kibana/kibana:${VERSION_TAG}
+    image: kibana:${VERSION_TAG}
     links:
       - elasticsearch
 
