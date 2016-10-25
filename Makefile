@@ -24,17 +24,18 @@ IMAGE_TAG=$(REMOTE_IMAGE):$(VERSION_TAG)
 LATEST_TAG=$(REMOTE_IMAGE):latest
 BASE_IMAGE=$(REGISTRY)/kibana/kibana-ubuntu-base:latest
 
+TEST_COMPOSE=docker-compose --file docker-compose.test.yml
 
 test: flake8 clean build
-	docker-compose up -d elasticsearch kibana
+	$(TEST_COMPOSE) up -d elasticsearch kibana
 	make pytest || (make clean; false)
 	make clean
 
 flake8:
-	docker-compose run --rm tester flake8 /tmp/tests
+	$(TEST_COMPOSE) run --rm tester flake8 /tmp/tests
 
 pytest:
-	docker-compose run --rm tester py.test /tmp/tests
+	$(TEST_COMPOSE) run --rm tester py.test -p no:cacheprovider /tmp/tests
 
 build:
 	docker-compose build --pull
@@ -50,10 +51,12 @@ push: build
 		docker push $(LATEST_TAG); \
 	fi
 
-clean:
+clean: clean-test
 	docker-compose down
 	docker-compose rm --force
-	rm -rf tests/__pycache__ tests/.cache
-	find tests/ -name *.pyc -delete
+
+clean-test:
+	$(TEST_COMPOSE) down
+	$(TEST_COMPOSE) rm --force
 
 .PHONY: build clean flake8 push pytest test

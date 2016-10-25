@@ -11,4 +11,7 @@ RUN pip install --upgrade --quiet \
     retrying \
     pytest
 
+# Supress creation of __pycache__ directories.
+ENV PYTHONDONTWRITEBYTECODE=1
+
 CMD ["/bin/bash"]

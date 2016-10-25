@@ -23,11 +23,3 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${VERSION_TAG}
-
-  tester:
-    build:
-      context: build/python
-    links:
-      - kibana
-    volumes:
-      - ./tests:/tmp/tests
