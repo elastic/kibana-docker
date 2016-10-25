@@ -11,10 +11,4 @@ RUN pip install --upgrade --quiet \
     retrying \
     pytest
 
-RUN adduser -D testuser
-
-USER testuser
-
-RUN mkdir /tmp/tests
-WORKDIR /tmp/tests
-CMD py.test
+CMD ["/bin/bash"]
