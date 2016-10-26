@@ -16,17 +16,69 @@ Available tags:
 
 ## Using the image
 
+To save some keystrokes, first set:
+
+``` shell
+export ELASTIC_REG=docker.elastic.co/kibana
+export ELASTIC_VERSION=5.0.0-rc1
+export KIBANA_IMAGE=$ELASTIC_REG/kibana:$ELASTIC_VERSION
+```
+
 ##### Run Kibana listening on localhost port 5601:
 
 ``` shell
-docker run -d -p 5601:5601 -e 'ELASTICSEARCH_URL=http://es_host:9200' --name kibana docker.elastic.co/kibana/kibana
+docker run -it -p 5601:5601 -e 'ELASTICSEARCH_URL=http://es_host:9200' $KIBANA_IMAGE
 ```
 
 ## Configuration options
 
-Kibana settings, which are traditionally set in `kibana.yml` can be passed
-as environment variables to the container with `-e`, as seen the `ELASTICSEARCH_URL`
-example above.
+The image offers several methods for configuring Kibana. The conventional
+approach is to provide a customized `kibana.yml` file, but it's also possible
+to use environment variables to set options, as shown in the example above.
+
+### Bind-mounted configuration
+
+One option is to provide a `kibana.yml` configuration file via bind mounting.
+Either provide a single file:
+
+``` shell
+docker run -it -v ~/kibana.yml:/usr/share/kibana/config/kibana.yml $KIBANA_IMAGE
+```
+
+or the entire configuration directory, which may be necessary when
+using docker-compose, for example:
+
+``` shell
+docker run -it -v ~/kibana-config/:/usr/share/kibana/config/ $KIBANA_IMAGE
+```
+
+### Customized image
+
+In some environments, it may make more sense to prepare a custom image
+containing your configuration. A Dockerfile to achieve this may be as simple
+as:
+
+``` dockerfile
+FROM docker.elastic.co/kibana/kibana:5.0.0-rc1
+ADD kibana.yml /usr/share/kibana/config/
+```
+
+You could then build and try the image with something like:
+
+``` shell
+docker build --tag=kibana-custom .
+docker run -it kibana-custom
+```
+
+### Environment variable configuration
+
+Support is provided for configuring Kibana via environment variables. Note
+that this is not a native feature of Kibana, but is provided by a wrapper in
+the image. The wrapper translates environment variables to Kibana command-line
+options.
+
+This table shows all the available options that can be configured in this way,
+with their default values:
 
 <!--- Generate this table with ./bin/kibana-conf-to-dockerfile kibana.yml -->
 | Environment Variable                    | Kibana Setting                          | Default Value               |
@@ -59,6 +111,9 @@ example above.
 | `SERVER_PORT`                           | `server.port`                           | `5601`                      |
 | `SERVER_SSL_CERT`                       | `server.ssl.cert`                       | _Null_                      |
 | `SERVER_SSL_KEY`                        | `server.ssl.key`                        | _Null_                      |
+
+Command-line options, and thus environment variables in this case, take
+precedence over settings configured in `kibana.yml` and override them.
 
 ## SSL
 To enable SSL encryption, provide certificate and key files in PEM
