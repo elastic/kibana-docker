@@ -9,10 +9,8 @@ The image is hosted in Elastic's own docker registry: `docker.elastic.co/kibana`
 
 Available tags:
 
-- 5.0.0-alpha5
-- 5.0.0-beta1
-- 5.0.0-rc1
-- latest -> 5.0.0-rc1
+- 5.0.0
+- latest -> 5.0.0
 
 ## Using the image
 
@@ -20,7 +18,7 @@ To save some keystrokes, first set:
 
 ``` shell
 export ELASTIC_REG=docker.elastic.co/kibana
-export ELASTIC_VERSION=5.0.0-rc1
+export ELASTIC_VERSION=5.0.0
 export KIBANA_IMAGE=$ELASTIC_REG/kibana:$ELASTIC_VERSION
 ```
 
@@ -51,7 +49,7 @@ containing your configuration. A Dockerfile to achieve this may be as simple
 as:
 
 ``` dockerfile
-FROM docker.elastic.co/kibana/kibana:5.0.0-rc1
+FROM docker.elastic.co/kibana/kibana:5.0.0
 ADD kibana.yml /usr/share/kibana/config/
 ```
 
