@@ -32,10 +32,8 @@ test: flake8 clean build test-direct test-indirect
 
 test-direct:
 # Direct tests: Invoke the image in various ways and make assertions.
-	test -d venv || virtualenv --python=python3.5 venv
 	( \
 	  source venv/bin/activate; \
-	  pip install -r test/direct/requirements.txt; \
 	  py.test test/direct \
 	)
 
@@ -46,9 +44,11 @@ test-indirect:
 	$(TEST_COMPOSE) run --rm tester py.test -p no:cacheprovider /test/indirect || (make clean; false)
 	make clean
 
-flake8:
-	$(TEST_COMPOSE) run --rm tester flake8 /test
-
+flake8: venv
+	( \
+	  source venv/bin/activate; \
+	  flake8 /test \
+	)
 build:
 	docker-compose build --pull
 
@@ -68,5 +68,12 @@ clean: clean-test
 clean-test:
 	$(TEST_COMPOSE) down
 	$(TEST_COMPOSE) rm --force
+
+venv:
+	virtualenv --python=python3.5 venv
+	( \
+	  source venv/bin/activate; \
+	  pip install -r test/direct/requirements.txt; \
+	)
 
 .PHONY: build clean flake8 push pytest test
