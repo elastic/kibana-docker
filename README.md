@@ -27,7 +27,7 @@ export KIBANA_IMAGE=$ELASTIC_REG/kibana:$ELASTIC_VERSION
 ##### Run Kibana listening on localhost port 5601:
 
 ``` shell
-docker run -it -p 5601:5601 -e 'ELASTICSEARCH_URL=http://es_host:9200' $KIBANA_IMAGE
+docker run --rm -it -p 5601:5601 -e 'ELASTICSEARCH_URL=http://es_host:9200' $KIBANA_IMAGE
 ```
 
 ## Configuration options
@@ -38,18 +38,10 @@ to use environment variables to set options, as shown in the example above.
 
 ### Bind-mounted configuration
 
-One option is to provide a `kibana.yml` configuration file via bind mounting.
-Either provide a single file:
+One option is to provide a `kibana.yml` configuration file via bind mounting:
 
 ``` shell
-docker run -it -v ~/kibana.yml:/usr/share/kibana/config/kibana.yml $KIBANA_IMAGE
-```
-
-or the entire configuration directory, which may be necessary when
-using docker-compose, for example:
-
-``` shell
-docker run -it -v ~/kibana-config/:/usr/share/kibana/config/ $KIBANA_IMAGE
+docker run --rm -it -v ~/kibana.yml:/usr/share/kibana/config/kibana.yml $KIBANA_IMAGE
 ```
 
 ### Customized image
@@ -67,7 +59,7 @@ You could then build and try the image with something like:
 
 ``` shell
 docker build --tag=kibana-custom .
-docker run -it kibana-custom
+docker run --rm -it kibana-custom
 ```
 
 ### Environment variable configuration
