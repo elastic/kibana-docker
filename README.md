@@ -80,9 +80,10 @@ options.
 This table shows all the available options that can be configured in this way,
 with their default values:
 
-<!--- Generate this table with ./bin/kibana-conf-to-dockerfile kibana.yml -->
+<!--- Generate this table with: ./bin/mk-envvar-table kibana.yml -->
 | Environment Variable                    | Kibana Setting                          | Default Value               |
 | :-------------------                    | :-------------                          | :------------               |
+| `ELASTICSEARCH_CUSTOMHEADERS`           | `elasticsearch.customHeaders`           | `{}`                        |
 | `ELASTICSEARCH_PASSWORD`                | `elasticsearch.password`                | `changeme`                  |
 | `ELASTICSEARCH_PINGTIMEOUT`             | `elasticsearch.pingTimeout`             | `1500`                      |
 | `ELASTICSEARCH_PRESERVEHOST`            | `elasticsearch.preserveHost`            | `True`                      |
@@ -105,7 +106,7 @@ with their default values:
 | `OPS_INTERVAL`                          | `ops.interval`                          | `5000`                      |
 | `PID_FILE`                              | `pid.file`                              | `/var/run/kibana.pid`       |
 | `SERVER_BASEPATH`                       | `server.basePath`                       | `""`                        |
-| `SERVER_HOST`                           | `server.host`                           | `0.0.0.0`                   |
+| `SERVER_HOST`                           | `server.host`                           | `"0"`                 |
 | `SERVER_MAXPAYLOADBYTES`                | `server.maxPayloadBytes`                | `1048576`                   |
 | `SERVER_NAME`                           | `server.name`                           | `kibana`                    |
 | `SERVER_PORT`                           | `server.port`                           | `5601`                      |

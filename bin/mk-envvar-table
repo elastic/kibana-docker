@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+# Given a standard "kibana.yml" config file for Kibana, find all the
+# configuration options and produce a Markdown table documenting
+# how to set them with environment variables.
+
+import re
+import sys
+import yaml
+
+
+def make_env_var(setting):
+    return setting.upper().replace('.', '_')
+
+config_lines = ''
+with open(sys.argv[1]) as config_file:
+    # Collect and uncomment all the config lines.
+    for line in config_file:
+        if line.startswith("#"):
+            line = line[1:]
+        if re.search(':', line):
+            config_lines += line
+
+config = yaml.load(config_lines)
+
+overrides = {
+    'elasticsearch.url': 'http://elasticsearch:9200',
+    'elasticsearch.username': 'elastic',
+    'elasticsearch.password': 'changeme',
+    'elasticsearch.requestHeadersWhitelist': 'Authorization',
+    'server.basePath': '""',
+    'server.ssl.cert': '',
+    'server.ssl.key': '',
+}
+
+# The example config has 'your-hostname' for server.name.
+# Let's have something slightly nicer.
+config['server.name'] = 'kibana'
+
+# Produce the Markdown table (for README.md)
+sys.stdout.write('|Environment Variable|Kibana Setting|Default Value|\n')
+sys.stdout.write('|:-------------------|:-------------|:------------|\n')
+for setting in sorted(config.keys()):
+    value = overrides.get(setting, config[setting])
+    if value is None or value == '':
+        value = "_Null_"
+    else:
+        value = '`%s`' % value
+    option_doc = '| `%s` | `%s` | %s |\n' % (make_env_var(setting), setting, value)
+    sys.stdout.write(option_doc)
