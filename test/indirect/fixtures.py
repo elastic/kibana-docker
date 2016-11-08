@@ -9,8 +9,8 @@ from .retry import retry_settings
 
 
 class Kibana(object):
-    def get(self, location='/'):
-        "GET a page from Kibana."
+    def get(self, location='/', allow_redirects=True):
+        """GET a page from Kibana."""
         url = urlparse.urljoin('http://kibana:5601/', location)
         return requests.get(url)
 

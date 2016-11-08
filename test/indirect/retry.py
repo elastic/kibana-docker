@@ -1,11 +1,11 @@
 from __future__ import absolute_import
 
 from .exceptions import DockerStackError
-from requests.exceptions import ConnectionError
+from requests.exceptions import ConnectionError, TooManyRedirects
 
 
 def is_worth_retrying(exception):
-    for kind in [DockerStackError, ConnectionError]:
+    for kind in [DockerStackError, ConnectionError, TooManyRedirects]:
         if isinstance(exception, kind):
             return True
 
