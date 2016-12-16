@@ -41,6 +41,10 @@ kibana_vars=(
     server.port
     server.ssl.cert
     server.ssl.key
+    xpack.security.encryptionKey
+    xpack.security.sessionTimeout
+    xpack.security.cookieName
+    xpack.security.secureCookies
 )
 
 longopts=''
