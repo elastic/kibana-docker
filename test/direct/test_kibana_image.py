@@ -23,3 +23,8 @@ def test_default_environment_contains_no_kibana_config():
     defined_vars = [line.split('=')[0] for line in stdout_of('env').split()]
     for var in defined_vars:
         assert var in acceptable_vars
+
+
+def test_all_files_in_optimize_directory_are_owned_by_kibana():
+    bad_files = stdout_of('find /usr/share/kibana/optimize ! -user kibana').split()
+    assert len(bad_files) is 0

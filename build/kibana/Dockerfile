@@ -6,7 +6,6 @@ EXPOSE 5601
 
 WORKDIR /usr/share/kibana
 RUN curl -Ls ${KIBANA_DOWNLOAD_URL} | tar --strip-components=1 -zxf - && \
-    bin/kibana-plugin install ${X_PACK_URL} && \
     ln -s /usr/share/kibana /opt/kibana
 
 # Set some Kibana configuration defaults.
@@ -21,5 +20,6 @@ ADD ssl/kibana.example.org.* /usr/share/kibana/config/
 
 RUN usermod --home /usr/share/kibana kibana
 USER kibana
+RUN bin/kibana-plugin install ${X_PACK_URL}
 ENV PATH=/usr/share/kibana/bin:$PATH
 CMD /usr/local/bin/kibana-docker
