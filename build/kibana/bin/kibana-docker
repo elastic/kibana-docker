@@ -41,6 +41,9 @@ kibana_vars=(
     server.port
     server.ssl.cert
     server.ssl.key
+    xpack.monitoring.elasticsearch.url
+    xpack.monitoring.elasticsearch.username
+    xpack.monitoring.elasticsearch.password
     xpack.security.encryptionKey
     xpack.security.sessionTimeout
     xpack.security.cookieName
