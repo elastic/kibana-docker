@@ -51,7 +51,6 @@ kibana_vars=(
     xpack.monitoring.report_stats
     xpack.monitoring.kibana.collection.enabled
     xpack.monitoring.kibana.collection.interval
-    xpack.monitoring.ui.container.elasticsearch.enabled
     xpack.security.enabled
     xpack.security.encryptionKey
     xpack.security.sessionTimeout
