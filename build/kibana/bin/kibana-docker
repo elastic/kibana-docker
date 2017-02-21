@@ -44,6 +44,7 @@ kibana_vars=(
     xpack.monitoring.elasticsearch.url
     xpack.monitoring.elasticsearch.username
     xpack.monitoring.elasticsearch.password
+    xpack.monitoring.enabled
     xpack.monitoring.max_bucket_size
     xpack.monitoring.min_interval_seconds
     xpack.monitoring.node_resolver
