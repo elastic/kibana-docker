@@ -52,7 +52,7 @@ flake8: venv
 build:
 	docker-compose build --pull
 
-push: build
+push: test
 	docker push $(VERSIONED_IMAGE)
 
 clean: clean-test
