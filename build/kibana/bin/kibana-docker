@@ -20,6 +20,7 @@ kibana_vars=(
     elasticsearch.requestTimeout
     elasticsearch.shardTimeout
     elasticsearch.ssl.ca
+    elasticsearch.ssl.cert
     elasticsearch.ssl.certificate
     elasticsearch.ssl.certificateAuthorities
     elasticsearch.ssl.key
@@ -41,6 +42,7 @@ kibana_vars=(
     server.maxPayloadBytes
     server.name
     server.port
+    server.ssl.cert
     server.ssl.certificate
     server.ssl.certificateAuthorities
     server.ssl.cipherSuites
