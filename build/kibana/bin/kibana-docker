@@ -27,6 +27,18 @@ kibana_vars=(
     elasticsearch.ssl.verify
     elasticsearch.ssl.verificationMode
     elasticsearch.startupTimeout
+    elasticsearch.tribe.url
+    elasticsearch.tribe.username
+    elasticsearch.tribe.password
+    elasticsearch.tribe.ssl.cert
+    elasticsearch.tribe.ssl.certificate
+    elasticsearch.tribe.ssl.key
+    elasticsearch.tribe.ssl.ca
+    elasticsearch.tribe.ssl.verify
+    elasticsearch.tribe.pingTimeout
+    elasticsearch.tribe.requestTimeout
+    elasticsearch.tribe.requestHeadersWhitelist
+    elasticsearch.tribe.customHeaders
     elasticsearch.url
     elasticsearch.username
     kibana.defaultAppId
