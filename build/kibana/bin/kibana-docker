@@ -40,7 +40,14 @@ kibana_vars=(
     server.name
     server.port
     server.ssl.cert
+    server.ssl.certificateAuthorities
+    server.ssl.cipherSuites
+    server.ssl.clientAuthentication
+    server.ssl.enabled
     server.ssl.key
+    server.ssl.keyPassphrase
+    server.ssl.supportedProtocols
+    elasticsearch.ssl.keyPassphrase
     xpack.monitoring.elasticsearch.url
     xpack.monitoring.elasticsearch.username
     xpack.monitoring.elasticsearch.password
