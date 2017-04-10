@@ -52,6 +52,19 @@ kibana_vars=(
     xpack.monitoring.kibana.collection.enabled
     xpack.monitoring.kibana.collection.interval
     xpack.monitoring.ui.container.elasticsearch.enabled
+    xpack.reporting.enabled
+    xpack.reporting.encryptionKey
+    xpack.reporting.kibanaApp
+    xpack.reporting.kibanaServer.port
+    xpack.reporting.kibanaServer.protocol
+    xpack.reporting.kibanaServer.hostname
+    xpack.reporting.queue.indexInterval
+    xpack.reporting.queue.pollInterval
+    xpack.reporting.queue.timeout
+    xpack.reporting.capture.concurrency
+    xpack.reporting.capture.loadDelay
+    xpack.reporting.capture.settleTime
+    xpack.reporting.capture.timeout
     xpack.security.enabled
     xpack.security.encryptionKey
     xpack.security.sessionTimeout
