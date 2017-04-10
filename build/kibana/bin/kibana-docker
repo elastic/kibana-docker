@@ -61,6 +61,7 @@ kibana_vars=(
     server.ssl.key
     server.ssl.keyPassphrase
     server.ssl.supportedProtocols
+    status.allowAnonymous
     xpack.graph.enabled
     xpack.monitoring.elasticsearch.password
     xpack.monitoring.elasticsearch.url
