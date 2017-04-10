@@ -22,8 +22,22 @@ kibana_vars=(
     elasticsearch.ssl.ca
     elasticsearch.ssl.cert
     elasticsearch.ssl.key
+    elasticsearch.ssl.keyPassphrase
+    elasticsearch.ssl.verificationMode
     elasticsearch.ssl.verify
     elasticsearch.startupTimeout
+    elasticsearch.tribe.customHeaders
+    elasticsearch.tribe.password
+    elasticsearch.tribe.pingTimeout
+    elasticsearch.tribe.requestHeadersWhitelist
+    elasticsearch.tribe.requestTimeout
+    elasticsearch.tribe.ssl.ca
+    elasticsearch.tribe.ssl.cert
+    elasticsearch.tribe.ssl.certificate
+    elasticsearch.tribe.ssl.key
+    elasticsearch.tribe.ssl.verify
+    elasticsearch.tribe.url
+    elasticsearch.tribe.username
     elasticsearch.url
     elasticsearch.username
     kibana.defaultAppId
@@ -41,35 +55,37 @@ kibana_vars=(
     server.port
     server.ssl.cert
     server.ssl.key
+    server.ssl.keyPassphrase
+    server.ssl.supportedProtocols
+    xpack.monitoring.elasticsearch.password
     xpack.monitoring.elasticsearch.url
     xpack.monitoring.elasticsearch.username
-    xpack.monitoring.elasticsearch.password
     xpack.monitoring.enabled
+    xpack.monitoring.kibana.collection.enabled
+    xpack.monitoring.kibana.collection.interval
     xpack.monitoring.max_bucket_size
     xpack.monitoring.min_interval_seconds
     xpack.monitoring.node_resolver
     xpack.monitoring.report_stats
-    xpack.monitoring.kibana.collection.enabled
-    xpack.monitoring.kibana.collection.interval
     xpack.monitoring.ui.container.elasticsearch.enabled
-    xpack.reporting.enabled
-    xpack.reporting.encryptionKey
-    xpack.reporting.kibanaApp
-    xpack.reporting.kibanaServer.port
-    xpack.reporting.kibanaServer.protocol
-    xpack.reporting.kibanaServer.hostname
-    xpack.reporting.queue.indexInterval
-    xpack.reporting.queue.pollInterval
-    xpack.reporting.queue.timeout
     xpack.reporting.capture.concurrency
     xpack.reporting.capture.loadDelay
     xpack.reporting.capture.settleTime
     xpack.reporting.capture.timeout
+    xpack.reporting.enabled
+    xpack.reporting.encryptionKey
+    xpack.reporting.kibanaApp
+    xpack.reporting.kibanaServer.hostname
+    xpack.reporting.kibanaServer.port
+    xpack.reporting.kibanaServer.protocol
+    xpack.reporting.queue.indexInterval
+    xpack.reporting.queue.pollInterval
+    xpack.reporting.queue.timeout
+    xpack.security.cookieName
     xpack.security.enabled
     xpack.security.encryptionKey
-    xpack.security.sessionTimeout
-    xpack.security.cookieName
     xpack.security.secureCookies
+    xpack.security.sessionTimeout
 )
 
 longopts=''
