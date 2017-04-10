@@ -62,6 +62,11 @@ kibana_vars=(
     server.ssl.keyPassphrase
     server.ssl.supportedProtocols
     status.allowAnonymous
+    tilemap.options.attribution
+    tilemap.options.maxZoom
+    tilemap.options.minZoom
+    tilemap.options.subdomains
+    tilemap.url
     xpack.graph.enabled
     xpack.monitoring.elasticsearch.password
     xpack.monitoring.elasticsearch.url
