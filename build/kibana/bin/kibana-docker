@@ -52,6 +52,7 @@ kibana_vars=(
     ops.interval
     pid.file
     server.basePath
+    server.defaultRoute
     server.host
     server.maxPayloadBytes
     server.name
