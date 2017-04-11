@@ -69,6 +69,7 @@ kibana_vars=(
     server.ssl.keyPassphrase
     server.ssl.supportedProtocols
     status.allowAnonymous
+    status.v6ApiFormat
     tilemap.options.attribution
     tilemap.options.maxZoom
     tilemap.options.minZoom
