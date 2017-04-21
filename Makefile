@@ -1,16 +1,14 @@
 SHELL=/bin/bash
+export PATH := ./bin:./venv/bin:$(PATH)
+
 ifndef ELASTIC_VERSION
-ELASTIC_VERSION=5.3.2
+ELASTIC_VERSION := $(shell cat version.txt)
 endif
 
 ifdef STAGING_BUILD_NUM
 VERSION_TAG=$(ELASTIC_VERSION)-${STAGING_BUILD_NUM}
-KIBANA_DOWNLOAD_URL=http://staging.elastic.co/$(VERSION_TAG)/downloads/kibana/kibana-${ELASTIC_VERSION}-linux-x86_64.tar.gz
-X_PACK_URL=http://staging.elastic.co/$(VERSION_TAG)/downloads/kibana-plugins/x-pack/x-pack-${ELASTIC_VERSION}.zip
 else
 VERSION_TAG=$(ELASTIC_VERSION)
-KIBANA_DOWNLOAD_URL=https://artifacts.elastic.co/downloads/kibana/kibana-${ELASTIC_VERSION}-linux-x86_64.tar.gz
-X_PACK_URL=x-pack
 endif
 
 REGISTRY=docker.elastic.co
@@ -45,12 +43,10 @@ test-indirect:
 	make clean
 
 flake8: venv
-	( \
-	  source venv/bin/activate; \
-	  flake8 /test \
-	)
-build:
-	docker-compose build --pull
+	  flake8 test
+
+build: dockerfile
+	docker build --pull -t $(VERSIONED_IMAGE) build/kibana
 
 push: test
 	docker push $(VERSIONED_IMAGE)
@@ -63,11 +59,16 @@ clean-test:
 	$(TEST_COMPOSE) down
 	$(TEST_COMPOSE) rm --force
 
-venv:
-	virtualenv --python=python3.5 venv
-	( \
-	  source venv/bin/activate; \
-	  pip install -r test/direct/requirements.txt; \
-	)
+venv: requirements.txt
+	test -d venv || virtualenv --python=python3.5 venv
+	pip install -r requirements.txt
+	touch venv
+
+# Generate the Dockerfile from a Jinja2 template.
+dockerfile: venv templates/Dockerfile.j2
+	jinja2 \
+	  -D elastic_version='$(ELASTIC_VERSION)' \
+	  -D version_tag='$(VERSION_TAG)' \
+	  templates/Dockerfile.j2 > build/kibana/Dockerfile
 
 .PHONY: build clean flake8 push pytest test

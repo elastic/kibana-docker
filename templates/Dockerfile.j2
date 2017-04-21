@@ -1,0 +1,40 @@
+# This Dockerfile was generated from templates/Dockerfile.j2
+{% if '-' in version_tag -%}
+{%   set is_staging_build = True -%}
+{%   set url_root = 'http://staging.elastic.co/%s/downloads/kibana' % version_tag -%}
+{% else -%}
+{%   set url_root = 'https://artifacts.elastic.co/downloads/kibana' -%}
+{% endif -%}
+
+
+#FROM centos:7
+FROM docker.elastic.co/kibana/kibana-ubuntu-base:latest
+MAINTAINER Elastic Docker Team <docker@elastic.co>
+EXPOSE 5601
+
+WORKDIR /usr/share/kibana
+RUN curl -Ls {{ url_root }}/kibana-{{ elastic_version }}-linux-x86_64.tar.gz | tar --strip-components=1 -zxf - && \
+    ln -s /usr/share/kibana /opt/kibana
+
+ENV PATH=/usr/share/kibana/bin:$PATH
+
+# Set some Kibana configuration defaults.
+ADD config/kibana.yml /usr/share/kibana/config/
+
+# Add the launcher/wrapper script. It knows how to interpret environment
+# variables and translate them to Kibana CLI options.
+ADD bin/kibana-docker /usr/local/bin/
+
+# Add a self-signed SSL certificate for use in examples.
+ADD ssl/kibana.example.org.* /usr/share/kibana/config/
+
+RUN usermod --home /usr/share/kibana kibana
+USER kibana
+
+{% if is_staging_build -%}
+RUN kibana-plugin install http://staging.elastic.co/{{ version_tag }}/downloads/kibana-plugins/x-pack/x-pack-{{ elastic_version }}.zip
+{% else -%}
+RUN kibana-plugin install x-pack
+{% endif-%}
+
+CMD /usr/local/bin/kibana-docker
