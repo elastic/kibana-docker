@@ -7,8 +7,7 @@
 {% endif -%}
 
 
-#FROM centos:7
-FROM docker.elastic.co/kibana/kibana-ubuntu-base:latest
+FROM centos:7
 MAINTAINER Elastic Docker Team <docker@elastic.co>
 EXPOSE 5601
 
@@ -28,7 +27,11 @@ ADD bin/kibana-docker /usr/local/bin/
 # Add a self-signed SSL certificate for use in examples.
 ADD ssl/kibana.example.org.* /usr/share/kibana/config/
 
-RUN usermod --home /usr/share/kibana kibana
+# Provide a non-root user to run the process.
+RUN groupadd --gid 1000 kibana && \
+    adduser --uid 1000 --gid 1000 \
+      --home-dir /usr/share/kibana --no-create-home \
+      kibana
 USER kibana
 
 {% if is_staging_build -%}
