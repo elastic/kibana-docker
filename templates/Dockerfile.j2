@@ -2,13 +2,15 @@
 {% if '-' in version_tag -%}
 {%   set is_staging_build = True -%}
 {%   set url_root = 'http://staging.elastic.co/%s/downloads/kibana' % version_tag -%}
+{%   set elastic_version = version_tag.split('-')[0] -%}
 {% else -%}
 {%   set url_root = 'https://artifacts.elastic.co/downloads/kibana' -%}
+{%   set elastic_version = version_tag -%}
 {% endif -%}
 
 
 FROM centos:7
-MAINTAINER Elastic Docker Team <docker@elastic.co>
+LABEL maintainer "Elastic Docker Team <docker@elastic.co>"
 EXPOSE 5601
 
 WORKDIR /usr/share/kibana
@@ -29,7 +31,7 @@ ADD ssl/kibana.example.org.* /usr/share/kibana/config/
 
 # Provide a non-root user to run the process.
 RUN groupadd --gid 1000 kibana && \
-    adduser --uid 1000 --gid 1000 \
+    useradd --uid 1000 --gid 1000 \
       --home-dir /usr/share/kibana --no-create-home \
       kibana
 USER kibana

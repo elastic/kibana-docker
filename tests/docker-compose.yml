@@ -1,0 +1,8 @@
+---
+version: '3'
+services:
+  kibana:
+    container_name: kibana-test
+
+  elasticsearch:
+    container_name: elasticsearch-test

@@ -11,49 +11,20 @@ else
 VERSION_TAG=$(ELASTIC_VERSION)
 endif
 
-REGISTRY=docker.elastic.co
-IMAGE=$(REGISTRY)/kibana/kibana
-VERSIONED_IMAGE=$(IMAGE):$(VERSION_TAG)
-LATEST_IMAGE=$(IMAGE):latest
+ELASTIC_REGISTRY=docker.elastic.co
+VERSIONED_IMAGE=$(ELASTIC_REGISTRY)/kibana/kibana:$(VERSION_TAG)
 
-export ELASTIC_VERSION
-export KIBANA_DOWNLOAD_URL
-export X_PACK_URL
-export VERSIONED_IMAGE
-export VERSION_TAG
+test: lint build docker-compose.yml
+	./bin/testinfra tests
 
-BASE_IMAGE=$(REGISTRY)/kibana/kibana-ubuntu-base:latest
-
-TEST_COMPOSE=docker-compose --file docker-compose.test.yml
-
-test: flake8 clean build test-direct test-indirect
-
-test-direct:
-# Direct tests: Invoke the image in various ways and make assertions.
-	( \
-	  source venv/bin/activate; \
-	  py.test test/direct \
-	)
-
-test-indirect:
-# Indirect tests: Use a dedicated testing container to probe Kibana
-# over the network.
-	$(TEST_COMPOSE) up -d elasticsearch kibana
-	$(TEST_COMPOSE) run --rm tester py.test -p no:cacheprovider /test/indirect || (make clean; false)
-	make clean
-
-flake8: venv
-	  flake8 test
+lint: venv
+	  flake8 tests
 
 build: dockerfile
 	docker build --pull -t $(VERSIONED_IMAGE) build/kibana
 
 push: test
 	docker push $(VERSIONED_IMAGE)
-
-clean: clean-test
-	docker-compose down
-	docker-compose rm --force
 
 clean-test:
 	$(TEST_COMPOSE) down
@@ -65,10 +36,15 @@ venv: requirements.txt
 	touch venv
 
 # Generate the Dockerfile from a Jinja2 template.
-dockerfile: venv templates/Dockerfile.j2
+dockerfile: venv
 	jinja2 \
-	  -D elastic_version='$(ELASTIC_VERSION)' \
 	  -D version_tag='$(VERSION_TAG)' \
 	  templates/Dockerfile.j2 > build/kibana/Dockerfile
 
-.PHONY: build clean flake8 push pytest test
+# Generate docker-compose.yml from a Jinja2 template.
+docker-compose.yml: venv
+	jinja2 \
+	  -D version_tag='$(VERSION_TAG)' \
+	  templates/docker-compose.yml.j2 > docker-compose.yml
+
+.PHONY: build clean flake8 push pytest test dockerfile docker-compose.yml
