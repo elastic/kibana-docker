@@ -13,6 +13,9 @@ FROM centos:7
 LABEL maintainer "Elastic Docker Team <docker@elastic.co>"
 EXPOSE 5601
 
+# Add Reporting dependencies.
+RUN yum install -y fontconfig freetype && yum clean all
+
 WORKDIR /usr/share/kibana
 RUN curl -Ls {{ url_root }}/kibana-{{ elastic_version }}-linux-x86_64.tar.gz | tar --strip-components=1 -zxf - && \
     ln -s /usr/share/kibana /opt/kibana
