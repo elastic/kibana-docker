@@ -18,6 +18,8 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:{{ version_tag }}
     networks: [elastic]
+    environment:
+      - discovery.type=single-node
 
 networks:
   elastic:

@@ -10,6 +10,7 @@
 {%   set url_root = 'https://staging.elastic.co/%s/downloads/kibana' % version_tag -%}
 {%   set x_pack = 'https://staging.elastic.co/%s/downloads/kibana-plugins/x-pack/x-pack-%s.zip' % (version_tag, elastic_version) -%}
 {% else -%}
+{%   set version_tag = elastic_version -%}
 {%   set url_root = 'https://artifacts.elastic.co/downloads/kibana' -%}
 {%   set x_pack = 'x-pack' -%}
 {% endif -%}
