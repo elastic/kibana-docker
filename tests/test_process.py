@@ -11,6 +11,6 @@ def test_process_is_running_as_the_correct_user(kibana):
 
 
 def test_default_environment_contains_no_kibana_config(kibana):
-    acceptable_vars = ['HOME', 'HOSTNAME', 'TERM', 'PATH', 'PWD', 'SHLVL', '_']
+    acceptable_vars = ['ELASTIC_CONTAINER', 'HOME', 'HOSTNAME', 'TERM', 'PATH', 'PWD', 'SHLVL', '_']
     for var in kibana.environment.keys():
         assert var in acceptable_vars

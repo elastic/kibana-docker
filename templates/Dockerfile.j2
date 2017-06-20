@@ -14,12 +14,13 @@ LABEL maintainer "Elastic Docker Team <docker@elastic.co>"
 EXPOSE 5601
 
 # Add Reporting dependencies.
-RUN yum install -y fontconfig freetype && yum clean all
+RUN yum update -y && yum install -y fontconfig freetype && yum clean all
 
 WORKDIR /usr/share/kibana
 RUN curl -Ls {{ url_root }}/kibana-{{ elastic_version }}-linux-x86_64.tar.gz | tar --strip-components=1 -zxf - && \
     ln -s /usr/share/kibana /opt/kibana
 
+ENV ELASTIC_CONTAINER true
 ENV PATH=/usr/share/kibana/bin:$PATH
 
 # Set some Kibana configuration defaults.
