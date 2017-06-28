@@ -23,8 +23,11 @@ lint: venv
 build: dockerfile
 	docker build --pull -t $(VERSIONED_IMAGE) build/kibana
 
+# Push the image to the dedicated push endpoint at "push.docker.elastic.co"
 push: test
-	docker push $(VERSIONED_IMAGE)
+	docker tag $(VERSIONED_IMAGE) push.$(VERSIONED_IMAGE)
+	docker push push.$(VERSIONED_IMAGE)
+	docker rmi push.$(VERSIONED_IMAGE)
 
 clean-test:
 	$(TEST_COMPOSE) down
