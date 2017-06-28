@@ -39,7 +39,10 @@ kibana_vars=(
     elasticsearch.tribe.ssl.ca
     elasticsearch.tribe.ssl.cert
     elasticsearch.tribe.ssl.certificate
+    elasticsearch.tribe.ssl.certificateAuthorities
     elasticsearch.tribe.ssl.key
+    elasticsearch.tribe.ssl.keyPassphrase
+    elasticsearch.tribe.ssl.verificationMode
     elasticsearch.tribe.ssl.verify
     elasticsearch.tribe.url
     elasticsearch.tribe.username
