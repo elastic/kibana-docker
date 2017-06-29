@@ -1,6 +1,8 @@
 SHELL=/bin/bash
 export PATH := ./bin:./venv/bin:$(PATH)
 
+PYTHON ?= $(shell which python3.5 || which python3.6)
+
 ifndef ELASTIC_VERSION
 ELASTIC_VERSION := $(shell cat version.txt)
 endif
@@ -34,7 +36,7 @@ clean-test:
 	$(TEST_COMPOSE) rm --force
 
 venv: requirements.txt
-	test -d venv || virtualenv --python=python3.5 venv
+	test -d venv || virtualenv --python=$(PYTHON) venv
 	pip install -r requirements.txt
 	touch venv
 
