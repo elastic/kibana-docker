@@ -104,6 +104,7 @@ kibana_vars=(
     xpack.reporting.queue.indexInterval
     xpack.reporting.queue.pollInterval
     xpack.reporting.queue.timeout
+    xpack.searchprofiler.enabled
     xpack.security.cookieName
     xpack.security.enabled
     xpack.security.encryptionKey
