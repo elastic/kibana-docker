@@ -30,14 +30,14 @@ ENV ELASTIC_CONTAINER true
 ENV PATH=/usr/share/kibana/bin:$PATH
 
 # Set some Kibana configuration defaults.
-ADD config/kibana.yml /usr/share/kibana/config/
+COPY config/kibana.yml /usr/share/kibana/config/
 
 # Add the launcher/wrapper script. It knows how to interpret environment
 # variables and translate them to Kibana CLI options.
-ADD bin/kibana-docker /usr/local/bin/
+COPY bin/kibana-docker /usr/local/bin/
 
 # Add a self-signed SSL certificate for use in examples.
-ADD ssl/kibana.example.org.* /usr/share/kibana/config/
+COPY ssl/kibana.example.org.* /usr/share/kibana/config/
 
 # Provide a non-root user to run the process.
 RUN groupadd --gid 1000 kibana && \
