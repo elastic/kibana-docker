@@ -1,13 +1,10 @@
-# This Dockerfile was generated from templates/Dockerfile.j2
-{% if '-' in version_tag -%}
-{%   set is_staging_build = True -%}
-{%   set url_root = 'http://staging.elastic.co/%s/downloads/kibana' % version_tag -%}
-{%   set elastic_version = version_tag.split('-')[0] -%}
+# This Dockerfile was generated from the template at templates/Dockerfile-oss.j2
+{% if staging_build_num -%}
+{%   set version_tag = elastic_version + '-' + staging_build_num -%}
+{%   set url_root = 'https://staging.elastic.co/%s/downloads/kibana' % version_tag -%}
 {% else -%}
 {%   set url_root = 'https://artifacts.elastic.co/downloads/kibana' -%}
-{%   set elastic_version = version_tag -%}
 {% endif -%}
-
 
 FROM centos:7
 LABEL maintainer "Elastic Docker Team <docker@elastic.co>"
@@ -24,7 +21,7 @@ ENV ELASTIC_CONTAINER true
 ENV PATH=/usr/share/kibana/bin:$PATH
 
 # Set some Kibana configuration defaults.
-ADD config/kibana.yml /usr/share/kibana/config/
+COPY config/kibana-oss.yml /usr/share/kibana/config/kibana.yml
 
 # Add the launcher/wrapper script. It knows how to interpret environment
 # variables and translate them to Kibana CLI options.
@@ -39,11 +36,5 @@ RUN groupadd --gid 1000 kibana && \
       --home-dir /usr/share/kibana --no-create-home \
       kibana
 USER kibana
-
-{% if is_staging_build -%}
-RUN kibana-plugin install http://staging.elastic.co/{{ version_tag }}/downloads/kibana-plugins/x-pack/x-pack-{{ elastic_version }}.zip
-{% else -%}
-RUN kibana-plugin install x-pack
-{% endif-%}
 
 CMD /usr/local/bin/kibana-docker
