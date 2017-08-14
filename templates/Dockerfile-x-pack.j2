@@ -1,0 +1,14 @@
+# This Dockerfile was generated from the template at templates/Dockerfile-xpack.j2
+{% if release_manager and elastic_version.endswith('-SNAPSHOT') -%}
+{%   set x_pack = 'http://localhost/build/snapshot-artifacts/x-pack-kibana/build/distributions/x-pack-%s.zip' % elastic_version -%}
+{% elif release_manager -%}
+{%   set x_pack = 'http://localhost/build/release-artifacts/x-pack-kibana/build/distributions/x-pack-%s.zip' % elastic_version -%}
+{% elif staging_build_num -%}
+{%   set x_pack = 'https://staging.elastic.co/%s/downloads/kibana-plugins/x-pack/x-pack-%s.zip' % (version_tag, elastic_version) -%}
+{% else -%}
+{%   set x_pack = 'x-pack' -%}
+{% endif -%}
+
+FROM {{ oss_image }}
+RUN kibana-plugin install {{ x_pack }}
+ADD config/kibana-x-pack.yml /usr/share/kibana/config/kibana.yml

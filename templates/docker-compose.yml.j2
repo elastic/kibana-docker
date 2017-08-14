@@ -2,10 +2,10 @@
 version: '3'
 services:
   kibana:
-    image: docker.elastic.co/kibana/kibana:{{ version_tag }}
+    image: docker.elastic.co/kibana/kibana:{{ version_tag }}-{{ image_flavor }}
     ports:
       - 5601:5601
-    networks: [elastic]
+    networks: [elastic]    
 
     # Configure certificate and key files to enable SSL. The certificate
     # provided in the example is self-signed, and thus insecure. It should
@@ -16,10 +16,16 @@ services:
     #   - SERVER_SSL_KEY=/usr/share/kibana/config/kibana.example.org.key
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:{{ version_tag }}
+    {% if image_flavor == 'x-pack' -%}
+    image: docker.elastic.co/elasticsearch/elasticsearch:{{ version_tag }}-platinum
+    {% else -%}
+    image: docker.elastic.co/elasticsearch/elasticsearch:{{ version_tag }}-{{ image_flavor }}
+    {% endif-%}
     networks: [elastic]
     environment:
       - discovery.type=single-node
-
+      {% if image_flavor == 'x-pack' -%}
+      - ELASTIC_PASSWORD=changeme
+      {% endif %}
 networks:
   elastic:

@@ -1,18 +1,14 @@
-# This Dockerfile was generated from templates/Dockerfile.j2
+# This Dockerfile was generated from the template at templates/Dockerfile-oss.j2
 {% if release_manager and elastic_version.endswith('-SNAPSHOT') -%}
 {%   set url_root = 'http://localhost/build/snapshot-artifacts/kibana/target' -%}
-{%   set x_pack = 'http://localhost/build/snapshot-artifacts/x-pack-kibana/build/distributions/x-pack-%s.zip' % elastic_version -%}
 {% elif release_manager -%}
 {%   set url_root = 'http://localhost/build/release-artifacts/kibana/target' -%}
-{%   set x_pack = 'http://localhost/build/release-artifacts/x-pack-kibana/build/distributions/x-pack-%s.zip' % elastic_version -%}
 {% elif staging_build_num -%}
 {%   set version_tag = elastic_version + '-' + staging_build_num -%}
 {%   set url_root = 'https://staging.elastic.co/%s/downloads/kibana' % version_tag -%}
-{%   set x_pack = 'https://staging.elastic.co/%s/downloads/kibana-plugins/x-pack/x-pack-%s.zip' % (version_tag, elastic_version) -%}
 {% else -%}
 {%   set version_tag = elastic_version -%}
 {%   set url_root = 'https://artifacts.elastic.co/downloads/kibana' -%}
-{%   set x_pack = 'x-pack' -%}
 {% endif -%}
 
 FROM centos:7
@@ -30,7 +26,7 @@ ENV ELASTIC_CONTAINER true
 ENV PATH=/usr/share/kibana/bin:$PATH
 
 # Set some Kibana configuration defaults.
-COPY config/kibana.yml /usr/share/kibana/config/
+COPY config/kibana-oss.yml /usr/share/kibana/config/kibana.yml
 
 # Add the launcher/wrapper script. It knows how to interpret environment
 # variables and translate them to Kibana CLI options.
@@ -45,7 +41,5 @@ RUN groupadd --gid 1000 kibana && \
       --home-dir /usr/share/kibana --no-create-home \
       kibana
 USER kibana
-
-RUN kibana-plugin install {{ x_pack }}
 
 CMD /usr/local/bin/kibana-docker

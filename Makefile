@@ -1,29 +1,41 @@
 SHELL=/bin/bash
+ELASTIC_REGISTRY ?= docker.elastic.co
+
 export PATH := ./bin:./venv/bin:$(PATH)
+
+# Determine the version to build. Override by setting ELASTIC_VERSION env var.
+ELASTIC_VERSION := $(shell ./bin/elastic-version)
+
+ifdef STAGING_BUILD_NUM
+  VERSION_TAG=$(ELASTIC_VERSION)-${STAGING_BUILD_NUM}
+else
+  VERSION_TAG=$(ELASTIC_VERSION)
+endif
 
 PYTHON ?= $(shell command -v python3.5 || command -v python3.6)
 
-ifndef ELASTIC_VERSION
-ELASTIC_VERSION := $(shell ./bin/elastic-version)
-endif
+# Build different images tagged as :version-<flavor>
+IMAGE_FLAVORS ?= oss x-pack
 
-ifdef STAGING_BUILD_NUM
-VERSION_TAG=$(ELASTIC_VERSION)-${STAGING_BUILD_NUM}
-else
-VERSION_TAG=$(ELASTIC_VERSION)
-endif
+# Which image flavor will additionally receive the plain `:version` tag
+DEFAULT_IMAGE_FLAVOR ?= x-pack
 
-ELASTIC_REGISTRY=docker.elastic.co
 VERSIONED_IMAGE=$(ELASTIC_REGISTRY)/kibana/kibana:$(VERSION_TAG)
 
-test: lint build docker-compose.yml
-	./bin/testinfra tests
+test: lint docker-compose
+	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
+	  ./bin/pytest tests --image-flavor=$(FLAVOR); \
+	)
 
 lint: venv
 	  flake8 tests
 
 build: dockerfile
-	docker build --pull -t $(VERSIONED_IMAGE) build/kibana
+	docker pull centos:7
+	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
+	  docker build -t $(VERSIONED_IMAGE)-$(FLAVOR) \
+	    -f build/kibana/Dockerfile-$(FLAVOR) build/kibana; \
+	)
 
 release-manager-snapshot: clean
 	RELEASE_MANAGER=true ELASTIC_VERSION=$(ELASTIC_VERSION)-SNAPSHOT make dockerfile
@@ -35,9 +47,15 @@ release-manager-release: clean
 
 # Push the image to the dedicated push endpoint at "push.docker.elastic.co"
 push: test
-	docker tag $(VERSIONED_IMAGE) push.$(VERSIONED_IMAGE)
-	docker push push.$(VERSIONED_IMAGE)
-	docker rmi push.$(VERSIONED_IMAGE)
+	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
+	  docker tag $(VERSIONED_IMAGE)-$(FLAVOR) push.$(VERSIONED_IMAGE)-$(FLAVOR); \
+	  docker push push.$(VERSIONED_IMAGE)-$(FLAVOR); \
+	  docker rmi push.$(VERSIONED_IMAGE)-$(FLAVOR); \
+	)
+	# Also push the default version, with no suffix like '-oss' or '-x-pack'
+	docker tag $(VERSIONED_IMAGE)-$(DEFAULT_IMAGE_FLAVOR) push.$(VERSIONED_IMAGE);
+	docker push push.$(VERSIONED_IMAGE);
+	docker rmi push.$(VERSIONED_IMAGE);
 
 clean-test:
 	$(TEST_COMPOSE) down
@@ -48,18 +66,25 @@ venv: requirements.txt
 	pip install -r requirements.txt
 	touch venv
 
-# Generate the Dockerfile from a Jinja2 template.
-dockerfile: venv templates/Dockerfile.j2
-	jinja2 \
-	  -D elastic_version='$(ELASTIC_VERSION)' \
-	  -D staging_build_num='$(STAGING_BUILD_NUM)' \
-	  -D release_manager='$(RELEASE_MANAGER)' \
-	  templates/Dockerfile.j2 > build/kibana/Dockerfile
+# Generate the Dockerfiles from Jinja2 templates.
+dockerfile: venv templates/Dockerfile*.j2
+	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
+	  jinja2 \
+	    -D oss_image='$(VERSIONED_IMAGE)-oss' \
+	    -D elastic_version='$(ELASTIC_VERSION)' \
+	    -D staging_build_num='$(STAGING_BUILD_NUM)' \
+	    -D release_manager='$(RELEASE_MANAGER)' \
+	    templates/Dockerfile-oss.j2 > build/kibana/Dockerfile-oss; \
+	)
 
-# Generate docker-compose.yml from a Jinja2 template.
-docker-compose.yml: venv
-	jinja2 \
-	  -D version_tag='$(VERSION_TAG)' \
-	  templates/docker-compose.yml.j2 > docker-compose.yml
+# Generate docker-compose files from Jinja2 templates.
+docker-compose: venv
+	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
+	  jinja2 \
+	    -D version_tag='$(VERSION_TAG)' \
+	    -D image_flavor='$(FLAVOR)' \
+	   templates/docker-compose.yml.j2 > docker-compose-$(FLAVOR).yml; \
+	)
+	ln -sf docker-compose-$(DEFAULT_IMAGE_FLAVOR).yml docker-compose.yml
 
-.PHONY: build clean flake8 push pytest test dockerfile docker-compose.yml
+.PHONY: build clean flake8 push pytest test dockerfile docker-compose

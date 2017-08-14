@@ -2,5 +2,5 @@
 **/__pycache__
 **/*.pyc
 /venv
-/build/kibana/Dockerfile
-/docker-compose.yml
+/build/kibana/Dockerfile*
+/docker-compose*.yml
