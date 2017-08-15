@@ -22,6 +22,8 @@ DEFAULT_IMAGE_FLAVOR ?= x-pack
 
 VERSIONED_IMAGE=$(ELASTIC_REGISTRY)/kibana/kibana:$(VERSION_TAG)
 
+all: build test
+
 test: lint docker-compose
 	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
 	  ./bin/pytest tests --image-flavor=$(FLAVOR); \
@@ -74,7 +76,7 @@ dockerfile: venv templates/Dockerfile*.j2
 	    -D elastic_version='$(ELASTIC_VERSION)' \
 	    -D staging_build_num='$(STAGING_BUILD_NUM)' \
 	    -D release_manager='$(RELEASE_MANAGER)' \
-	    templates/Dockerfile-oss.j2 > build/kibana/Dockerfile-oss; \
+	    templates/Dockerfile-$(FLAVOR).j2 > build/kibana/Dockerfile-$(FLAVOR); \
 	)
 
 # Generate docker-compose files from Jinja2 templates.
