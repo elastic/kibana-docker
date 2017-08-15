@@ -22,10 +22,13 @@ DEFAULT_IMAGE_FLAVOR ?= x-pack
 
 VERSIONED_IMAGE=$(ELASTIC_REGISTRY)/kibana/kibana:$(VERSION_TAG)
 
+FIGLET := pyfiglet -w 160 -f puffy
+
 all: build test
 
 test: lint docker-compose
 	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
+	  $(FIGLET) "test: $(ELASTIC_VERSION)-$(FLAVOR)"; \
 	  ./bin/pytest tests --image-flavor=$(FLAVOR); \
 	)
 
@@ -35,6 +38,7 @@ lint: venv
 build: dockerfile
 	docker pull centos:7
 	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
+	  $(FIGLET) "build: $(ELASTIC_VERSION)-$(FLAVOR)"; \
 	  docker build -t $(VERSIONED_IMAGE)-$(FLAVOR) \
 	    -f build/kibana/Dockerfile-$(FLAVOR) build/kibana; \
 	)
