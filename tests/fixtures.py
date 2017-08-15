@@ -1,7 +1,7 @@
 import requests
 import urllib
 from retrying import retry
-from pytest import fixture
+from pytest import fixture, config
 from .retry import retry_settings
 
 
@@ -11,7 +11,7 @@ def kibana(host):
         def __init__(self):
             self.url = 'http://localhost:5601'
             self.process = host.process.get(comm='node')
-
+            self.image_flavor = config.getoption('--image-flavor')
             self.environment = dict(
                 [line.split('=', 1) for line in self.stdout_of('env').split('\n')]
             )
