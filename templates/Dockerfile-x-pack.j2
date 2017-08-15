@@ -11,4 +11,4 @@
 
 FROM {{ oss_image }}
 RUN kibana-plugin install {{ x_pack }}
-ADD config/kibana-x-pack.yml /usr/share/kibana/config/kibana.yml
+COPY config/kibana-x-pack.yml /usr/share/kibana/config/kibana.yml
