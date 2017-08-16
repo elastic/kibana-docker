@@ -20,7 +20,7 @@ IMAGE_FLAVORS ?= oss x-pack
 # Which image flavor will additionally receive the plain `:version` tag
 DEFAULT_IMAGE_FLAVOR ?= x-pack
 
-VERSIONED_IMAGE=$(ELASTIC_REGISTRY)/kibana/kibana:$(VERSION_TAG)
+VERSIONED_IMAGE := $(ELASTIC_REGISTRY)/kibana/kibana:$(VERSION_TAG)
 
 FIGLET := pyfiglet -w 160 -f puffy
 
@@ -76,11 +76,11 @@ venv: requirements.txt
 dockerfile: venv templates/Dockerfile*.j2
 	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
 	  jinja2 \
-	    -D oss_image='$(VERSIONED_IMAGE)-oss' \
+	    -D image_flavor='$(FLAVOR)' \
 	    -D elastic_version='$(ELASTIC_VERSION)' \
 	    -D staging_build_num='$(STAGING_BUILD_NUM)' \
 	    -D release_manager='$(RELEASE_MANAGER)' \
-	    templates/Dockerfile-$(FLAVOR).j2 > build/kibana/Dockerfile-$(FLAVOR); \
+	    templates/Dockerfile.j2 > build/kibana/Dockerfile-$(FLAVOR); \
 	)
 
 # Generate docker-compose files from Jinja2 templates.
