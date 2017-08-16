@@ -2,8 +2,10 @@
 {% if staging_build_num -%}
 {%   set version_tag = elastic_version + '-' + staging_build_num -%}
 {%   set url_root = 'https://staging.elastic.co/%s/downloads/kibana' % version_tag -%}
+{%   set x_pack = 'https://staging.elastic.co/%s/downloads/kibana-plugins/x-pack/x-pack-%s.zip' % (version_tag, elastic_version) -%}
 {% else -%}
 {%   set url_root = 'https://artifacts.elastic.co/downloads/kibana' -%}
+{%   set x_pack = 'x-pack' -%}
 {% endif -%}
 
 FROM centos:7
@@ -36,5 +38,7 @@ RUN groupadd --gid 1000 kibana && \
       --home-dir /usr/share/kibana --no-create-home \
       kibana
 USER kibana
-
+{% if image_flavor != 'oss' %}
+RUN kibana-plugin install {{ x_pack }}
+{% endif %}
 CMD /usr/local/bin/kibana-docker
