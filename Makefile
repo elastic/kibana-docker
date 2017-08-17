@@ -62,7 +62,7 @@ venv: requirements.txt
 	touch venv
 
 # Generate the Dockerfiles from Jinja2 templates.
-dockerfile: venv templates/Dockerfile*.j2
+dockerfile: venv templates/Dockerfile.j2
 	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
 	  jinja2 \
 	    -D image_flavor='$(FLAVOR)' \
