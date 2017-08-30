@@ -20,7 +20,7 @@ IMAGE_FLAVORS ?= x-pack
 # Which image flavor will additionally receive the plain `:version` tag
 DEFAULT_IMAGE_FLAVOR ?= x-pack
 
-VERSIONED_IMAGE := $(ELASTIC_REGISTRY)/kibana/kibana:$(VERSION_TAG)
+IMAGE_TAG ?= $(ELASTIC_REGISTRY)/kibana/kibana
 
 FIGLET := pyfiglet -w 160 -f puffy
 
@@ -28,7 +28,7 @@ all: build test
 
 test: lint docker-compose
 	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
-	  $(FIGLET) "test: $(ELASTIC_VERSION)-$(FLAVOR)"; \
+	  $(FIGLET) "test: $(FLAVOR)"; \
 	  ./bin/pytest tests --image-flavor=$(FLAVOR); \
 	)
 
@@ -38,30 +38,33 @@ lint: venv
 build: dockerfile
 	docker pull centos:7
 	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
-	  $(FIGLET) "build: $(ELASTIC_VERSION)-$(FLAVOR)"; \
-	  docker build -t $(VERSIONED_IMAGE)-$(FLAVOR) \
+	  $(FIGLET) "build: $(FLAVOR)"; \
+	  docker build -t $(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG) \
 	    -f build/kibana/Dockerfile-$(FLAVOR) build/kibana; \
+	  if [[ $(FLAVOR) == $(DEFAULT_IMAGE_FLAVOR) ]]; then \
+	    docker tag $(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG) $(IMAGE_TAG):$(VERSION_TAG); \
+	  fi; \
 	)
 
 release-manager-snapshot: clean
 	RELEASE_MANAGER=true ELASTIC_VERSION=$(ELASTIC_VERSION)-SNAPSHOT make dockerfile
-	docker build --network=host -t $(VERSIONED_IMAGE)-SNAPSHOT build/kibana
+	docker build --network=host -t $(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG)-SNAPSHOT build/kibana
 
 release-manager-release: clean
 	RELEASE_MANAGER=true ELASTIC_VERSION=$(ELASTIC_VERSION) make dockerfile
-	docker build --network=host -t $(VERSIONED_IMAGE) build/kibana
+	docker build --network=host -t $(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG) build/kibana
 
 # Push the image to the dedicated push endpoint at "push.docker.elastic.co"
 push: test
 	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
-	  docker tag $(VERSIONED_IMAGE)-$(FLAVOR) push.$(VERSIONED_IMAGE)-$(FLAVOR); \
-	  docker push push.$(VERSIONED_IMAGE)-$(FLAVOR); \
-	  docker rmi push.$(VERSIONED_IMAGE)-$(FLAVOR); \
+	  docker tag $(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG) push.$(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG); \
+	  docker push push.$(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG); \
+	  docker rmi push.$(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG); \
 	)
 	# Also push the default version, with no suffix like '-oss' or '-x-pack'
-	docker tag $(VERSIONED_IMAGE)-$(DEFAULT_IMAGE_FLAVOR) push.$(VERSIONED_IMAGE);
-	docker push push.$(VERSIONED_IMAGE);
-	docker rmi push.$(VERSIONED_IMAGE);
+	docker tag $(IMAGE_TAG):$(VERSION_TAG) push.$(IMAGE_TAG):$(VERSION_TAG);
+	docker push push.$(IMAGE_TAG):$(VERSION_TAG);
+	docker rmi push.$(IMAGE_TAG):$(VERSION_TAG);
 
 clean-test:
 	$(TEST_COMPOSE) down
