@@ -15,7 +15,7 @@ endif
 PYTHON ?= $(shell command -v python3.5 || command -v python3.6)
 
 # Build different images tagged as :version-<flavor>
-IMAGE_FLAVORS ?= oss x-pack
+IMAGE_FLAVORS ?= x-pack
 
 # Which image flavor will additionally receive the plain `:version` tag
 DEFAULT_IMAGE_FLAVOR ?= x-pack
