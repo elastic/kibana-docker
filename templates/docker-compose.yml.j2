@@ -2,7 +2,7 @@
 version: '3'
 services:
   kibana:
-    image: docker.elastic.co/kibana/kibana:{{ version_tag }}-{{ image_flavor }}
+    image: docker.elastic.co/kibana/kibana-{{ image_flavor }}:{{ version_tag }}
     ports:
       - 5601:5601
     networks: [elastic]
