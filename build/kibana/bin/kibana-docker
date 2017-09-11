@@ -58,6 +58,7 @@ kibana_vars=(
     pid.file
     regionmap
     server.basePath
+    server.customResponseHeaders
     server.defaultRoute
     server.host
     server.maxPayloadBytes
