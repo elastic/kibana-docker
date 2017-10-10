@@ -21,6 +21,7 @@ IMAGE_FLAVORS ?= x-pack
 DEFAULT_IMAGE_FLAVOR ?= x-pack
 
 IMAGE_TAG ?= $(ELASTIC_REGISTRY)/kibana/kibana
+HTTPD ?= kibana-docker-artifact-server
 
 FIGLET := pyfiglet -w 160 -f puffy
 
@@ -47,12 +48,24 @@ build: dockerfile
 	)
 
 release-manager-snapshot: clean
-	RELEASE_MANAGER=true ELASTIC_VERSION=$(ELASTIC_VERSION)-SNAPSHOT make dockerfile
-	docker build --network=host -t $(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG)-SNAPSHOT build/kibana
+	ARTIFACTS_DIR=$(ARTIFACTS_DIR) ELASTIC_VERSION=$(ELASTIC_VERSION)-SNAPSHOT make build-from-local-artifacts
 
 release-manager-release: clean
-	RELEASE_MANAGER=true ELASTIC_VERSION=$(ELASTIC_VERSION) make dockerfile
-	docker build --network=host -t $(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG) build/kibana
+	ARTIFACTS_DIR=$(ARTIFACTS_DIR) ELASTIC_VERSION=$(ELASTIC_VERSION) make build-from-local-artifacts
+
+# Build from artifacts on the local filesystem, using an http server (running
+# in a container) to provide the artifacts to the Dockerfile.
+build-from-local-artifacts: venv dockerfile docker-compose
+	docker run --rm -d --name=$(HTTPD) \
+	           --network=host -v $(ARTIFACTS_DIR):/mnt \
+	           python:3 bash -c 'cd /mnt && python3 -m http.server'
+	timeout 120 bash -c 'until curl -s localhost:8000 > /dev/null; do sleep 1; done'
+	-$(foreach FLAVOR, $(IMAGE_FLAVORS), \
+	  pyfiglet -f puffy -w 160 "Building: $(FLAVOR)"; \
+	  docker build --network=host -t $(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG) -f build/kibana/Dockerfile-$(FLAVOR) build/kibana || \
+	    (docker kill $(HTTPD); false); \
+	)
+	-docker kill $(HTTPD)
 
 # Push the image to the dedicated push endpoint at "push.docker.elastic.co"
 push: test
@@ -82,7 +95,7 @@ dockerfile: venv templates/Dockerfile.j2
 	    -D image_flavor='$(FLAVOR)' \
 	    -D elastic_version='$(ELASTIC_VERSION)' \
 	    -D staging_build_num='$(STAGING_BUILD_NUM)' \
-	    -D release_manager='$(RELEASE_MANAGER)' \
+	    -D artifacts_dir='$(ARTIFACTS_DIR)' \
 	    templates/Dockerfile.j2 > build/kibana/Dockerfile-$(FLAVOR); \
 	)
 

@@ -1,10 +1,7 @@
 # This Dockerfile was generated from the template at templates/Dockerfile-oss.j2
-{% if release_manager and elastic_version.endswith('-SNAPSHOT') -%}
-{%   set url_root = 'http://localhost/build/snapshot-artifacts/kibana/target' -%}
-{%   set x_pack = 'http://localhost/build/snapshot-artifacts/x-pack-kibana/build/distributions/x-pack-%s.zip' % elastic_version -%}
-{% elif release_manager -%}
-{%   set url_root = 'http://localhost/build/release-artifacts/kibana/target' -%}
-{%   set x_pack = 'http://localhost/build/release-artifacts/x-pack-kibana/build/distributions/x-pack-%s.zip' % elastic_version -%}
+{% if artifacts_dir -%}
+{%   set url_root = 'http://localhost:8000/kibana/target' -%}
+{%   set x_pack = 'http://localhost:8000/x-pack-kibana/build/distributions/x-pack-%s.zip' % elastic_version -%}
 {% elif staging_build_num -%}
 {%   set version_tag = elastic_version + '-' + staging_build_num -%}
 {%   set url_root = 'https://staging.elastic.co/%s/downloads/kibana' % version_tag -%}
