@@ -64,6 +64,9 @@ build-from-local-artifacts: venv dockerfile docker-compose
 	  pyfiglet -f puffy -w 160 "Building: $(FLAVOR)"; \
 	  docker build --network=host -t $(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG) -f build/kibana/Dockerfile-$(FLAVOR) build/kibana || \
 	    (docker kill $(HTTPD); false); \
+	  if [[ $(FLAVOR) == $(DEFAULT_IMAGE_FLAVOR) ]]; then \
+	    docker tag $(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG) $(IMAGE_TAG):$(VERSION_TAG); \
+	  fi; \
 	)
 	-docker kill $(HTTPD)
 
