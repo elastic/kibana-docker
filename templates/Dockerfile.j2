@@ -1,4 +1,4 @@
-# This Dockerfile was generated from the template at templates/Dockerfile-oss.j2
+# This Dockerfile was generated from the template at templates/Dockerfile.j2
 {% if artifacts_dir -%}
 {%   set url_root = 'http://localhost:8000/kibana/target' -%}
 {%   set x_pack = 'http://localhost:8000/x-pack-kibana/build/distributions/x-pack-%s.zip' % elastic_version -%}
@@ -27,7 +27,7 @@ ENV ELASTIC_CONTAINER true
 ENV PATH=/usr/share/kibana/bin:$PATH
 
 # Set some Kibana configuration defaults.
-COPY config/kibana-oss.yml /usr/share/kibana/config/kibana.yml
+COPY config/kibana-{{ image_flavor }}.yml /usr/share/kibana/config/kibana.yml
 
 # Add the launcher/wrapper script. It knows how to interpret environment
 # variables and translate them to Kibana CLI options.
