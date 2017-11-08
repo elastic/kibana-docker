@@ -55,6 +55,7 @@ kibana_vars=(
     logging.silent
     logging.verbose
     ops.interval
+    path.data
     pid.file
     regionmap
     server.basePath
@@ -83,6 +84,7 @@ kibana_vars=(
     tilemap.options.subdomains
     tilemap.url
     xpack.graph.enabled
+    xpack.grokdebugger.enabled
     xpack.ml.enabled
     xpack.monitoring.elasticsearch.password
     xpack.monitoring.elasticsearch.url
@@ -100,8 +102,10 @@ kibana_vars=(
     xpack.reporting.capture.loadDelay
     xpack.reporting.capture.settleTime
     xpack.reporting.capture.timeout
+    xpack.reporting.csv.maxSizeBytes
     xpack.reporting.enabled
     xpack.reporting.encryptionKey
+    xpack.reporting.index
     xpack.reporting.kibanaApp
     xpack.reporting.kibanaServer.hostname
     xpack.reporting.kibanaServer.port
@@ -109,6 +113,7 @@ kibana_vars=(
     xpack.reporting.queue.indexInterval
     xpack.reporting.queue.pollInterval
     xpack.reporting.queue.timeout
+    xpack.reporting.roles.allow
     xpack.searchprofiler.enabled
     xpack.security.cookieName
     xpack.security.enabled
