@@ -45,4 +45,4 @@ USER kibana
 {% if image_flavor != 'oss' %}
 RUN kibana-plugin install {{ x_pack }}
 {% endif %}
-CMD /usr/local/bin/kibana-docker
+CMD ["/bin/bash", "/usr/local/bin/kibana-docker"]
