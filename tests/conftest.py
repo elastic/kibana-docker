@@ -1,4 +1,8 @@
+import requests
+
 from subprocess import run
+from retrying import retry
+from .retry import retry_settings
 
 
 def docker_compose(config, *args):
@@ -14,8 +18,18 @@ def pytest_addoption(parser):
                      help='Docker image flavor; the suffix used in docker-compose-<flavor>.yml')
 
 
+@retry(**retry_settings)
+def wait_for_kibana():
+    response = requests.get('http://localhost:5601/')
+    assert response.status_code in [
+        requests.codes.ok,    # OSS
+        requests.codes.found  # X-Pack
+    ]
+
+
 def pytest_configure(config):
     docker_compose(config, 'up', '-d')
+    wait_for_kibana()
 
 
 def pytest_unconfigure(config):

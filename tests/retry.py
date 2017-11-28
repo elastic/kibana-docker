@@ -3,9 +3,10 @@ from requests.exceptions import ConnectionError, TooManyRedirects
 
 
 def is_worth_retrying(exception):
-    for kind in [DockerStackError, ConnectionError, TooManyRedirects]:
+    for kind in [DockerStackError, ConnectionError, ConnectionResetError, TooManyRedirects]:
         if isinstance(exception, kind):
             return True
+    return False
 
 
 retry_settings = {
