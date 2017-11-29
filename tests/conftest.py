@@ -2,6 +2,7 @@ import requests
 
 from subprocess import run
 from retrying import retry
+from .exceptions import ExplicitRetryError
 from .retry import retry_settings
 
 
@@ -21,10 +22,12 @@ def pytest_addoption(parser):
 @retry(**retry_settings)
 def wait_for_kibana():
     response = requests.get('http://localhost:5601/')
-    assert response.status_code in [
+    ok_response_codes = [
         requests.codes.ok,    # OSS
         requests.codes.found  # X-Pack
     ]
+    if response.status_code not in ok_response_codes:
+        raise ExplicitRetryError
 
 
 def pytest_configure(config):
