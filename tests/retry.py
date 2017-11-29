@@ -10,7 +10,7 @@ def is_worth_retrying(exception):
 
 
 retry_settings = {
-    'stop_max_delay': 30000,
+    'stop_max_delay': 120000,
     'wait_exponential_multiplier': 100,
     'wait_exponential_max': 1000,
     'retry_on_exception': is_worth_retrying
