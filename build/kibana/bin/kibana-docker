@@ -90,6 +90,7 @@ kibana_vars=(
     xpack.monitoring.elasticsearch.password
     xpack.monitoring.elasticsearch.url
     xpack.monitoring.elasticsearch.username
+    xpack.monitoring.elasticsearch.ssl.certificateAuthorities
     xpack.monitoring.enabled
     xpack.monitoring.kibana.collection.enabled
     xpack.monitoring.kibana.collection.interval
