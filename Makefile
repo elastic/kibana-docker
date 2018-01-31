@@ -70,6 +70,16 @@ build-from-local-artifacts: venv dockerfile docker-compose
 	)
 	-docker kill $(HTTPD)
 
+# Build images from the latest snapshots on snapshots.elastic.co
+from-snapshot:
+	rm -rf snapshots
+	mkdir -p snapshots/kibana/target snapshots/x-pack-kibana/build/distributions
+	(cd snapshots/kibana/target && \
+	  wget https://snapshots.elastic.co/downloads/kibana/kibana-$(ELASTIC_VERSION)-SNAPSHOT-linux-x86_64.tar.gz)
+	(cd snapshots/x-pack-kibana/build/distributions && \
+	  wget https://snapshots.elastic.co/downloads/kibana-plugins/x-pack/x-pack-$(ELASTIC_VERSION)-SNAPSHOT.zip)
+	ARTIFACTS_DIR=$$PWD/snapshots make release-manager-snapshot
+
 # Push the image to the dedicated push endpoint at "push.docker.elastic.co"
 push: test
 	$(foreach FLAVOR, $(IMAGE_FLAVORS), \
