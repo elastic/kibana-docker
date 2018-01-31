@@ -4,3 +4,4 @@
 /venv
 /build/kibana/Dockerfile*
 /docker-compose*.yml
+/snapshots
