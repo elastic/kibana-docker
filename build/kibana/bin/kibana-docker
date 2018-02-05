@@ -77,6 +77,7 @@ kibana_vars=(
     server.ssl.keyPassphrase
     server.ssl.redirectHttpFromPort
     server.ssl.supportedProtocols
+    server.xsrf.whitelist
     status.allowAnonymous
     status.v6ApiFormat
     tilemap.options.attribution
@@ -118,6 +119,7 @@ kibana_vars=(
     xpack.reporting.queue.timeout
     xpack.reporting.roles.allow
     xpack.searchprofiler.enabled
+    xpack.security.authProviders
     xpack.security.cookieName
     xpack.security.enabled
     xpack.security.encryptionKey
