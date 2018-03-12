@@ -93,6 +93,7 @@ kibana_vars=(
     xpack.monitoring.elasticsearch.url
     xpack.monitoring.elasticsearch.username
     xpack.monitoring.elasticsearch.ssl.certificateAuthorities
+    xpack.monitoring.elasticsearch.ssl.verificationMode
     xpack.monitoring.enabled
     xpack.monitoring.kibana.collection.enabled
     xpack.monitoring.kibana.collection.interval
@@ -100,6 +101,7 @@ kibana_vars=(
     xpack.monitoring.min_interval_seconds
     xpack.monitoring.node_resolver
     xpack.monitoring.report_stats
+    xpack.monitoring.elasticsearch.pingTimeout
     xpack.monitoring.ui.container.elasticsearch.enabled
     xpack.monitoring.ui.enabled
     xpack.reporting.capture.concurrency
