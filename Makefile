@@ -14,11 +14,11 @@ endif
 
 PYTHON ?= $(shell command -v python3.5 || command -v python3.6)
 
-# Build different images tagged as :version-<flavor>
-IMAGE_FLAVORS ?= oss x-pack
+# Build different images for OSS-only and full versions.
+IMAGE_FLAVORS ?= oss full
 
-# Which image flavor will additionally receive the plain `:version` tag
-DEFAULT_IMAGE_FLAVOR ?= x-pack
+# Which image will get the default, unqualified name?
+DEFAULT_IMAGE_FLAVOR ?= full
 
 IMAGE_TAG ?= $(ELASTIC_REGISTRY)/kibana/kibana
 HTTPD ?= kibana-docker-artifact-server
@@ -73,11 +73,9 @@ build-from-local-artifacts: venv dockerfile docker-compose
 # Build images from the latest snapshots on snapshots.elastic.co
 from-snapshot:
 	rm -rf snapshots
-	mkdir -p snapshots/kibana/target snapshots/x-pack-kibana/build/distributions
 	(cd snapshots/kibana/target && \
-	  wget https://snapshots.elastic.co/downloads/kibana/kibana-$(ELASTIC_VERSION)-SNAPSHOT-linux-x86_64.tar.gz)
-	(cd snapshots/x-pack-kibana/build/distributions && \
-	  wget https://snapshots.elastic.co/downloads/kibana-plugins/x-pack/x-pack-$(ELASTIC_VERSION)-SNAPSHOT.zip)
+	  wget https://snapshots.elastic.co/downloads/kibana/kibana-$(ELASTIC_VERSION)-SNAPSHOT-linux-x86_64.tar.gz && \
+	  wget https://snapshots.elastic.co/downloads/kibana/kibana-oss-$(ELASTIC_VERSION)-SNAPSHOT-linux-x86_64.tar.gz)
 	ARTIFACTS_DIR=$$PWD/snapshots make release-manager-snapshot
 
 # Push the image to the dedicated push endpoint at "push.docker.elastic.co"
@@ -87,7 +85,7 @@ push: test
 	  docker push push.$(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG); \
 	  docker rmi push.$(IMAGE_TAG)-$(FLAVOR):$(VERSION_TAG); \
 	)
-	# Also push the default version, with no suffix like '-oss' or '-x-pack'
+	# Also push the default version, with no suffix like '-oss' or '-full'
 	docker tag $(IMAGE_TAG):$(VERSION_TAG) push.$(IMAGE_TAG):$(VERSION_TAG);
 	docker push push.$(IMAGE_TAG):$(VERSION_TAG);
 	docker rmi push.$(IMAGE_TAG):$(VERSION_TAG);
