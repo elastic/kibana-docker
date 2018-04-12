@@ -13,11 +13,3 @@ def test_opt_kibana_is_a_symlink_to_usr_share_kibana(kibana):
 def test_all_files_in_optimize_directory_are_owned_by_kibana(kibana):
     bad_files = kibana.stdout_of('find /usr/share/kibana/optimize ! -user kibana').split()
     assert len(bad_files) is 0
-
-
-def test_x_pack_installation(kibana):
-    installed = ('x-pack') in kibana.stdout_of('/usr/share/kibana/bin/kibana-plugin list')
-    if kibana.image_flavor == 'oss':
-        assert not installed
-    else:
-        assert installed

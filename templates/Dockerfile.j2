@@ -1,16 +1,20 @@
 # This Dockerfile was generated from the template at templates/Dockerfile.j2
 {% if artifacts_dir -%}
 {%   set url_root = 'http://localhost:8000/kibana/target' -%}
-{%   set x_pack = 'http://localhost:8000/x-pack-kibana/build/distributions/x-pack-%s.zip' % elastic_version -%}
 {% elif staging_build_num -%}
 {%   set version_tag = elastic_version + '-' + staging_build_num -%}
 {%   set url_root = 'https://staging.elastic.co/%s/downloads/kibana' % version_tag -%}
-{%   set x_pack = 'https://staging.elastic.co/%s/downloads/kibana-plugins/x-pack/x-pack-%s.zip' % (version_tag, elastic_version) -%}
 {% else -%}
 {%   set version_tag = elastic_version -%}
 {%   set url_root = 'https://artifacts.elastic.co/downloads/kibana' -%}
-{%   set x_pack = 'x-pack' -%}
 {% endif -%}
+
+{% if image_flavor == 'oss' -%}
+{%   set tarball = 'kibana-oss-%s-linux-x86_64.tar.gz' % elastic_version -%}
+{% else -%}
+{%   set tarball = 'kibana-%s-linux-x86_64.tar.gz' % elastic_version -%}
+{% endif -%}
+
 
 FROM centos:7
 LABEL maintainer "Elastic Docker Team <docker@elastic.co>"
@@ -20,7 +24,7 @@ EXPOSE 5601
 RUN yum update -y && yum install -y fontconfig freetype && yum clean all
 
 WORKDIR /usr/share/kibana
-RUN curl -Ls {{ url_root }}/kibana-{{ elastic_version }}-linux-x86_64.tar.gz | tar --strip-components=1 -zxf - && \
+RUN curl -Ls {{ url_root }}/{{ tarball }} | tar --strip-components=1 -zxf - && \
     ln -s /usr/share/kibana /opt/kibana
 
 ENV ELASTIC_CONTAINER true
@@ -42,7 +46,5 @@ RUN groupadd --gid 1000 kibana && \
       --home-dir /usr/share/kibana --no-create-home \
       kibana
 USER kibana
-{% if image_flavor != 'oss' %}
-RUN kibana-plugin install {{ x_pack }}
-{% endif %}
-CMD ["/bin/bash", "/usr/local/bin/kibana-docker"]
+
+CMD ["/usr/local/bin/kibana-docker"]

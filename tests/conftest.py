@@ -15,18 +15,14 @@ def docker_compose(config, *args):
 def pytest_addoption(parser):
     """Customize testinfra with config options via cli args"""
     # Let us specify which docker-compose-(image_flavor).yml file to use
-    parser.addoption('--image-flavor', action='store', default='x-pack',
+    parser.addoption('--image-flavor', action='store', default='full',
                      help='Docker image flavor; the suffix used in docker-compose-<flavor>.yml')
 
 
 @retry(**retry_settings)
 def wait_for_kibana():
     response = requests.get('http://localhost:5601/')
-    ok_response_codes = [
-        requests.codes.ok,    # OSS
-        requests.codes.found  # X-Pack
-    ]
-    if response.status_code not in ok_response_codes:
+    if response.status_code != requests.codes.ok:
         raise ExplicitRetryError
 
 
