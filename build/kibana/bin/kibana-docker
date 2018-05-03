@@ -85,6 +85,7 @@ kibana_vars=(
     tilemap.options.minZoom
     tilemap.options.subdomains
     tilemap.url
+    timelion.enabled
     xpack.apm.enabled
     xpack.graph.enabled
     xpack.grokdebugger.enabled
