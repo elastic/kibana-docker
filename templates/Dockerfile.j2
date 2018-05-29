@@ -24,27 +24,35 @@ EXPOSE 5601
 RUN yum update -y && yum install -y fontconfig freetype && yum clean all
 
 WORKDIR /usr/share/kibana
+
+# Set gid to 0 for kibana and make group permission similar to that of user
+# This is needed, for example, for Openshift Open:
+# https://docs.openshift.org/latest/creating_images/guidelines.html
+# and allows Kibana to run with an uid
 RUN curl -Ls {{ url_root }}/{{ tarball }} | tar --strip-components=1 -zxf - && \
-    ln -s /usr/share/kibana /opt/kibana
+    ln -s /usr/share/kibana /opt/kibana && \
+    chown -R 1000:0 . && \
+    chmod -R g=u /usr/share/kibana
 
 ENV ELASTIC_CONTAINER true
 ENV PATH=/usr/share/kibana/bin:$PATH
 
 # Set some Kibana configuration defaults.
-COPY config/kibana-{{ image_flavor }}.yml /usr/share/kibana/config/kibana.yml
+COPY --chown=1000:0 config/kibana-{{ image_flavor }}.yml /usr/share/kibana/config/kibana.yml
 
 # Add the launcher/wrapper script. It knows how to interpret environment
 # variables and translate them to Kibana CLI options.
-COPY bin/kibana-docker /usr/local/bin/
+COPY --chown=1000:0 bin/kibana-docker /usr/local/bin/
 
 # Add a self-signed SSL certificate for use in examples.
-COPY ssl/kibana.example.org.* /usr/share/kibana/config/
+COPY --chown=1000:0 ssl/kibana.example.org.* /usr/share/kibana/config/
 
 # Provide a non-root user to run the process.
 RUN groupadd --gid 1000 kibana && \
     useradd --uid 1000 --gid 1000 \
       --home-dir /usr/share/kibana --no-create-home \
       kibana
+
 USER kibana
 
 CMD ["/usr/local/bin/kibana-docker"]
