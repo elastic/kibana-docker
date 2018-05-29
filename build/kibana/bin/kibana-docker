@@ -87,6 +87,7 @@ kibana_vars=(
     tilemap.url
     timelion.enabled
     xpack.apm.enabled
+    xpack.apm.ui.enabled
     xpack.graph.enabled
     xpack.grokdebugger.enabled
     xpack.ml.enabled
