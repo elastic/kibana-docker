@@ -107,6 +107,10 @@ kibana_vars=(
     xpack.monitoring.report_stats
     xpack.monitoring.ui.container.elasticsearch.enabled
     xpack.monitoring.ui.enabled
+    xpack.reporting.capture.browser.chromium.disableSandbox
+    xpack.reporting.capture.browser.chromium.proxy.enabled
+    xpack.reporting.capture.browser.chromium.proxy.server
+    xpack.reporting.capture.browser.chromium.proxy.bypass
     xpack.reporting.capture.browser.type
     xpack.reporting.capture.concurrency
     xpack.reporting.capture.loadDelay
