@@ -73,6 +73,7 @@ build-from-local-artifacts: venv dockerfile docker-compose
 # Build images from the latest snapshots on snapshots.elastic.co
 from-snapshot:
 	rm -rf snapshots
+	mkdir -p snapshots/kibana/target
 	(cd snapshots/kibana/target && \
 	  wget https://snapshots.elastic.co/downloads/kibana/kibana-$(ELASTIC_VERSION)-SNAPSHOT-linux-x86_64.tar.gz && \
 	  wget https://snapshots.elastic.co/downloads/kibana/kibana-oss-$(ELASTIC_VERSION)-SNAPSHOT-linux-x86_64.tar.gz)
