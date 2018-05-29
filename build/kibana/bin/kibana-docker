@@ -54,6 +54,7 @@ kibana_vars=(
     logging.dest
     logging.quiet
     logging.silent
+    logging.useUTC
     logging.verbose
     ops.interval
     path.data
