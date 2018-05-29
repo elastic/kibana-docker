@@ -107,6 +107,7 @@ kibana_vars=(
     xpack.monitoring.report_stats
     xpack.monitoring.ui.container.elasticsearch.enabled
     xpack.monitoring.ui.enabled
+    xpack.reporting.capture.browser.type
     xpack.reporting.capture.concurrency
     xpack.reporting.capture.loadDelay
     xpack.reporting.capture.settleTime
