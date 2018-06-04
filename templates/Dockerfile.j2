@@ -32,7 +32,8 @@ WORKDIR /usr/share/kibana
 RUN curl -Ls {{ url_root }}/{{ tarball }} | tar --strip-components=1 -zxf - && \
     ln -s /usr/share/kibana /opt/kibana && \
     chown -R 1000:0 . && \
-    chmod -R g=u /usr/share/kibana
+    chmod -R g=u /usr/share/kibana && \
+    find /usr/share/kibana -type d -exec chmod g+s {} \;
 
 ENV ELASTIC_CONTAINER true
 ENV PATH=/usr/share/kibana/bin:$PATH
