@@ -23,6 +23,8 @@ def kibana(host):
             return requests.get(url)
 
         def stdout_of(self, command):
-            return host.run(command).stdout.strip()
+            result = host.run(command)
+            assert result.rc is 0
+            return result.stdout.strip()
 
     return Kibana()
