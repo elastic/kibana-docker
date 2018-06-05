@@ -1,5 +1,18 @@
 from .constants import version
 from .fixtures import kibana
+from pytest import config, mark
+
+image_flavor = config.getoption('--image-flavor')
+
+
+def exclude_browser_files(files):
+    '''Return all files that are not part of a browser
+
+    Useful for permission tests, since browsers get installed at runtime and
+    can have unexpected ownership, group or mode.
+    '''
+    # REF: https://github.com/elastic/kibana/blob/fe4609647dd2a7a7fedfb23d63f5886a24eacbe1/x-pack/plugins/reporting/server/browsers/install.js#L41  # noqa
+    return [f for f in files if not f.startswith('/usr/share/kibana/data/phantomjs-')]
 
 
 def test_kibana_is_the_correct_version(kibana):
@@ -17,9 +30,19 @@ def test_all_files_in_optimize_directory_are_owned_by_kibana(kibana):
 
 def test_all_files_in_kibana_directory_are_gid_zero(kibana):
     bad_files = kibana.stdout_of('find /usr/share/kibana ! -gid 0').split()
+    assert len(exclude_browser_files(bad_files)) is 0
+
+
+def test_all_files_in_kibana_directory_are_writable(kibana):
+    bad_files = kibana.stdout_of('find -not -writable').split()
     assert len(bad_files) is 0
 
 
 def test_all_directories_in_kibana_directory_are_setgid(kibana):
-    bad_dirs = kibana.stdout_of('find /usr/share/kibana -type d ! -perm /g+s').split()
-    assert len(bad_dirs) is 0
+    bad_files = kibana.stdout_of('find /usr/share/kibana -type d ! -perm /g+s').split()
+    assert len(exclude_browser_files(bad_files)) is 0
+
+
+def test_all_files_in_kibana_directory_are_group_writable(kibana):
+    bad_files = kibana.stdout_of('find /usr/share/kibana ! -perm /g+w').split()
+    assert len(exclude_browser_files(bad_files)) is 0
