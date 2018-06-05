@@ -1,8 +1,5 @@
 from .constants import version
 from .fixtures import kibana
-from pytest import config, mark
-
-image_flavor = config.getoption('--image-flavor')
 
 
 def exclude_browser_files(files):
