@@ -17,7 +17,6 @@
 
 
 FROM centos:7
-LABEL maintainer "Elastic Docker Team <docker@elastic.co>"
 EXPOSE 5601
 
 # Add Reporting dependencies.
@@ -58,5 +57,17 @@ RUN groupadd --gid 1000 kibana && \
       kibana
 
 USER kibana
+
+LABEL org.label-schema.schema-version="1.0" \
+  org.label-schema.vendor="Elastic" \
+  org.label-schema.name="kibana" \
+  org.label-schema.version="{{ elastic_version }}" \
+  org.label-schema.url="https://www.elastic.co/products/kibana" \
+  org.label-schema.vcs-url="https://github.com/elastic/kibana-docker" \
+{% if image_flavor == 'oss' -%}
+  license="Apache-2.0"
+{% else -%}
+  license="Elastic License"
+{% endif -%}
 
 CMD ["/usr/local/bin/kibana-docker"]
