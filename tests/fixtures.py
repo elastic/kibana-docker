@@ -32,7 +32,7 @@ def kibana(host):
                 self.image = 'docker.elastic.co/kibana/kibana:%s' % (self.tag)
 
             self.docker_metadata = json.loads(
-                run(['docker', 'inspect', self.image], stdout=PIPE).stdout)[0]
+                run(['docker', 'inspect', self.image], stdout=PIPE).stdout.decode())[0]
 
         @retry(**retry_settings)
         def get(self, location='/', allow_redirects=True):
