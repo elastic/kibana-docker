@@ -35,6 +35,10 @@ test: lint docker-compose
 
 # Test a snapshot image, which requires modifying the ELASTIC_VERSION to find the right images.
 test-snapshot:
+	# We need 'oss' and 'full' versions of Elasticsearch, but there's no explicit '-full'
+	# on the registry. Pull the unqualified name and tag it as '-full'.
+	docker pull $(ELASTIC_REGISTRY)/elasticsearch/elasticsearch:$(ELASTIC_VERSION)-SNAPSHOT
+	docker tag $(ELASTIC_REGISTRY)/elasticsearch/elasticsearch{,-full}:$(ELASTIC_VERSION)-SNAPSHOT
 	ELASTIC_VERSION=$(ELASTIC_VERSION)-SNAPSHOT make test
 
 lint: venv
