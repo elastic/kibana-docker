@@ -69,6 +69,7 @@ kibana_vars=(
     server.maxPayloadBytes
     server.name
     server.port
+    server.rewriteBasePath
     server.ssl.cert
     server.ssl.certificate
     server.ssl.certificateAuthorities
