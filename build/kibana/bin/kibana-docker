@@ -109,6 +109,7 @@ kibana_vars=(
     xpack.monitoring.report_stats
     xpack.monitoring.elasticsearch.pingTimeout
     xpack.monitoring.ui.container.elasticsearch.enabled
+    xpack.monitoring.ui.container.logstash.enabled
     xpack.monitoring.ui.enabled
     xpack.reporting.capture.browser.chromium.disableSandbox
     xpack.reporting.capture.browser.chromium.proxy.enabled
