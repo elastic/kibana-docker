@@ -90,6 +90,7 @@ kibana_vars=(
     tilemap.options.subdomains
     tilemap.url
     timelion.enabled
+    vega.enableExternalUrls
     xpack.apm.enabled
     xpack.apm.ui.enabled
     xpack.graph.enabled
