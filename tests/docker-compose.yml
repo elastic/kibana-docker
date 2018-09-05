@@ -5,4 +5,3 @@ services:
     container_name: kibana-test
 
   elasticsearch:
-    container_name: elasticsearch-test

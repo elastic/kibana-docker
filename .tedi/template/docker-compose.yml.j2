@@ -1,8 +1,14 @@
+{% if image_flavor == 'oss' -%}
+{% set elasticsearch_suffix = '-oss' -%}
+{% else -%}
+{% set elasticsearch_suffix = '' -%}
+{% endif -%}
 ---
 version: '3'
 services:
   kibana:
-    image: docker.elastic.co/kibana/kibana-{{ image_flavor }}:{{ version_tag }}
+    image: docker.elastic.co/kibana/kibana-{{ image_flavor }}:{{ image_tag }}
+    container_name: kibana-test
     ports:
       - 5601:5601
     networks: [elastic]
@@ -16,9 +22,11 @@ services:
     #   - SERVER_SSL_KEY=/usr/share/kibana/config/kibana.example.org.key
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-{{ image_flavor }}:{{ version_tag }}
+    image: docker.elastic.co/elasticsearch/elasticsearch{{ elasticsearch_suffix }}:{{ image_tag }}
+    container_name: elasticsearch-test
     networks: [elastic]
     environment:
       - discovery.type=single-node
+
 networks:
   elastic:

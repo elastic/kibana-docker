@@ -6,3 +6,5 @@
 /docker-compose*.yml
 /snapshots
 /.pytest_cache
+/.tedi/build
+/.tedi/assets

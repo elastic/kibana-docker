@@ -1,0 +1,48 @@
+images:
+  kibana-full:
+    aliases:
+      - kibana
+      - docker.elastic.co/kibana/kibana
+      - docker.elastic.co/kibana/kibana-full
+    facts:
+      image_flavor: full
+
+  kibana-oss:
+    aliases:
+      - docker.elastic.co/kibana/kibana-oss
+    facts:
+      image_flavor: oss
+
+facts:
+  docker_registry: docker.elastic.co
+  kibana_dir: /usr/local/src/kibana
+
+asset_sets:
+  # By default, build from publicly released artifacts.
+  # Note that they may not be available yet for the current {{ elastic_version }}.
+  default:
+    - filename: kibana-full-{{ elastic_version }}.tar.gz
+      source: https://artifacts.elastic.co/downloads/kibana/kibana-{{ elastic_version }}-linux-x86_64.tar.gz
+    - filename: kibana-oss-{{ elastic_version }}.tar.gz
+      source: https://artifacts.elastic.co/downloads/kibana/kibana-oss-{{ elastic_version }}-linux-x86_64.tar.gz
+
+  # Published nightly snapshot artifacts.
+  remote_snapshot:
+    - filename: kibana-full-{{ elastic_version }}.tar.gz
+      source: https://snapshots.elastic.co/downloads/kibana/kibana-{{ elastic_version }}-SNAPSHOT-linux-x86_64.tar.gz
+    - filename: kibana-oss-{{ elastic_version }}.tar.gz
+      source: https://snapshots.elastic.co/downloads/kibana/kibana-oss-{{ elastic_version }}-SNAPSHOT-linux-x86_64.tar.gz
+
+  # Snapshot artifacts on the local disk.
+  local_snapshot:
+    - filename: kibana-full-{{ elastic_version }}.tar.gz
+      source: file://{{ kibana_dir}}/target/kibana-{{ elastic_version }}-SNAPSHOT-linux-x86_64.tar.gz
+    - filename: kibana-oss-{{ elastic_version }}.tar.gz
+      source: file://{{ kibana_dir}}/target/kibana-oss-{{ elastic_version }}-SNAPSHOT-linux-x86_64.tar.gz
+
+  # Release artifacts on the local disk.
+  local_release:
+    - filename: kibana-full-{{ elastic_version }}.tar.gz
+      source: file://{{ kibana_dir}}/target/kibana-{{ elastic_version }}-linux-x86_64.tar.gz
+    - filename: kibana-oss-{{ elastic_version }}.tar.gz
+      source: file://{{ kibana_dir}}/target/kibana-oss-{{ elastic_version }}-linux-x86_64.tar.gz

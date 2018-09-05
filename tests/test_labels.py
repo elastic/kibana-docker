@@ -8,7 +8,7 @@ def test_labels(kibana):
     assert labels['org.label-schema.url'] == 'https://www.elastic.co/products/kibana'
     assert labels['org.label-schema.vcs-url'] == 'https://github.com/elastic/kibana-docker'
     assert labels['org.label-schema.vendor'] == 'Elastic'
-    assert labels['org.label-schema.version'] == kibana.tag
+    assert labels['org.label-schema.version'] == kibana.tag.replace('-SNAPSHOT', '')
     if kibana.flavor == 'oss':
         assert labels['license'] == 'Apache-2.0'
     else:

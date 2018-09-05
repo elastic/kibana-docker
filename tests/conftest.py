@@ -8,7 +8,7 @@ from .retry import retry_settings
 
 def docker_compose(config, *args):
     image_flavor = config.getoption('--image-flavor')
-    compose_flags = '-f docker-compose-{0}.yml -f tests/docker-compose.yml'.format(image_flavor).split(' ')
+    compose_flags = ('-f .tedi/build/kibana-%s/docker-compose.yml' % image_flavor).split()
     run(['docker-compose'] + compose_flags + list(args))
 
 
