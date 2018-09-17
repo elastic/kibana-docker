@@ -9,7 +9,9 @@ def exclude_browser_files(files):
     can have unexpected ownership, group or mode.
     '''
     # REF: https://github.com/elastic/kibana/blob/fe4609647dd2a7a7fedfb23d63f5886a24eacbe1/x-pack/plugins/reporting/server/browsers/install.js#L41  # noqa
-    return [f for f in files if not f.startswith('/usr/share/kibana/data/phantomjs-')]
+    files = [f for f in files if not f.startswith('/usr/share/kibana/data/phantomjs-')]
+    files = [f for f in files if not f.startswith('/usr/share/kibana/data/headless_shell-')]
+    return files
 
 
 def test_kibana_is_the_correct_version(kibana):
