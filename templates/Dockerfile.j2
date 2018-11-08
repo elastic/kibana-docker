@@ -38,7 +38,8 @@ RUN groupadd --gid 1000 kibana && \
     useradd --uid 1000 --gid 1000 \
       --home-dir /usr/share/kibana --no-create-home \
       kibana
-USER kibana
+
+USER 1000
 
 {% if is_staging_build -%}
 RUN kibana-plugin install http://staging.elastic.co/{{ version_tag }}/downloads/kibana-plugins/x-pack/x-pack-{{ elastic_version }}.zip
