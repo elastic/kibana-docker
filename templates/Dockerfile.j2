@@ -56,7 +56,7 @@ RUN groupadd --gid 1000 kibana && \
       --home-dir /usr/share/kibana --no-create-home \
       kibana
 
-USER kibana
+USER 1000
 
 LABEL org.label-schema.schema-version="1.0" \
   org.label-schema.vendor="Elastic" \
