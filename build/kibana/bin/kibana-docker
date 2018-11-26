@@ -93,8 +93,10 @@ kibana_vars=(
     vega.enableExternalUrls
     xpack.apm.enabled
     xpack.apm.ui.enabled
+    xpack.canvas.enabled
     xpack.graph.enabled
     xpack.grokdebugger.enabled
+    xpack.infra.enabled
     xpack.ml.enabled
     xpack.monitoring.elasticsearch.password
     xpack.monitoring.elasticsearch.pingTimeout
