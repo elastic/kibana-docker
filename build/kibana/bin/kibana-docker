@@ -49,6 +49,7 @@ kibana_vars=(
     elasticsearch.tribe.username
     elasticsearch.url
     elasticsearch.username
+    i18n.locale
     kibana.defaultAppId
     kibana.index
     logging.dest
