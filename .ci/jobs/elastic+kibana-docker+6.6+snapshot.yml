@@ -1,0 +1,5 @@
+---
+- job:
+    name: elastic+kibana-docker+6.6+snapshot
+    display-name: 'elastic / kibana-docker # 6.6 - snapshot'
+    description: Periodic testing of snapshot builds for the Kibana Docker 6.6 branch.
